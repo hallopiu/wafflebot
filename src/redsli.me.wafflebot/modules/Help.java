@@ -41,7 +41,8 @@ public class Help extends CommandModule {
                 .withTitle("Wafflebot Help")
                 .appendField("Uptime", "Started " + new PrettyTime().format(new Date(Wafflebot.started)), true)
                 .appendField("Commands", this.getCommands(event.getGuild(), true), true)
-                .appendField("Module specific commands", getCommands(event.getGuild(), false), true).withTimestamp(Instant.now());
+                .appendField("Module specific commands", getCommands(event.getGuild(), false), true).withTimestamp(Instant.now())
+                .appendField("Github", "https://github.com/hallopiu/wafflebot/", false);
         MessageUtil.sendMessage(event.getChannel(), builder.build());
     }
 
