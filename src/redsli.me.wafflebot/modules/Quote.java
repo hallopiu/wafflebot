@@ -25,9 +25,12 @@ public class Quote extends ReactModule {
     public void onReact(ReactionEvent reactionEvent) throws Exception {
         WaffleEmbedBuilder embed = new WaffleEmbedBuilder().withColor(DiscordHelper.getHighestRoleColor(reactionEvent))
                 .withAuthorName(reactionEvent.getMessage().getAuthor().getName()).withAuthorIcon(reactionEvent.getMessage().getAuthor().getAvatarURL())
-                .withTitle("Quoted by " + reactionEvent.getUser().getName())
                 .withDesc(reactionEvent.getMessage().getContent())
+                .withFooterIcon(reactionEvent.getUser().getAvatarURL())
+                .withFooterText("Quoted by " + reactionEvent.getUser().getName())
                 .withTimestamp(reactionEvent.getMessage().getTimestamp());
+        if(reactionEvent.getUser().getNicknameForGuild(reactionEvent.getGuild()) != null)
+            embed.withFooterText("Quoted by " + reactionEvent.getUser().getNicknameForGuild(reactionEvent.getGuild()));
         if(reactionEvent.getMessage().getAttachments() != null && !reactionEvent.getMessage().getAttachments().isEmpty()) {
             reactionEvent.getMessage().getAttachments().stream().map(IMessage.Attachment::getUrl).forEach(embed::withImage);
         }
