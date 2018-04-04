@@ -6,6 +6,7 @@ import redsli.me.wafflebot.Wafflebot;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,16 @@ public class CTFMapHelper {
         reader.close();
 
         return maps.stream().filter(m -> m.map_id == id).findFirst().map(mapEntry -> mapEntry.name).orElse(null);
+    }
+
+    public static List<Integer> getAllIds() throws Exception {
+        BufferedReader reader = new BufferedReader(new FileReader(MAP_FILE));
+        List<MapEntry> maps = Wafflebot.GSON.fromJson(reader, new TypeToken<List<MapEntry>>() {
+        }.getType());
+        reader.close();
+        List<Integer> ids = new ArrayList<>();
+        maps.forEach(m -> ids.add(m.map_id));
+        return ids;
     }
 
     class MapEntry {
