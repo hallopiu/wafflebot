@@ -34,7 +34,7 @@ public class CTFUpcoming extends ChatListenerModule {
                         msg = msg.replace("<@&222473706532765696>", "");
                         msg = msg.replace("<@&222473075461980160>", "");
                         msg = msg.replace("<@&222473223961444353>", "");
-                        MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(event.getGuild(), this), EmbedPresets.information().withTitle(getName()).withDesc(msg).withTimestamp(System.currentTimeMillis()));
+                        MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(g, this), EmbedPresets.information().withTitle(getName()).withDesc(msg).withTimestamp(System.currentTimeMillis()));
                     }
                 }
             }

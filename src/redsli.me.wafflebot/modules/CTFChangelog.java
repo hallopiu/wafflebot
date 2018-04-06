@@ -32,7 +32,7 @@ public class CTFChangelog extends CommandModule {
 
         for(IGuild g : Wafflebot.client.getGuilds()) {
             if(isActive(g)) {
-                MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(event.getGuild(), this), EmbedPresets.information().withTitle(getName()).withDesc(message).withTimestamp(System.currentTimeMillis()));
+                MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(g, this), EmbedPresets.information().withTitle(getName()).withDesc(message).withTimestamp(System.currentTimeMillis()));
             }
         }
     }

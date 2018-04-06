@@ -30,7 +30,7 @@ public class CMS extends ChatListenerModule {
         if(msg.toLowerCase().contains("est") && msg.toLowerCase().contains("https://youtu.be")) {
             for(IGuild g : Wafflebot.client.getGuilds()) {
                 if(isActive(g) && !g.equals(event.getGuild())) {
-                    MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(event.getGuild(), this), EmbedPresets.information().withTitle(getName()).withDesc(msg).withTimestamp(System.currentTimeMillis()));
+                    MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(g, this), EmbedPresets.information().withTitle(getName()).withDesc(msg).withTimestamp(System.currentTimeMillis()));
                 }
             }
         }
