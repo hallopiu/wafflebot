@@ -40,10 +40,29 @@ public class Help extends CommandModule {
                 .withThumbnail("https://cdn.discordapp.com/avatars/428575339749572608/23c66d315ab662873495daef767d3067.png")
                 .withTitle("Wafflebot Help")
                 .appendField("Uptime", "Started " + new PrettyTime().format(new Date(Wafflebot.started)), true)
-                .appendField("Commands", this.getCommands(event.getGuild(), true), true)
-                .appendField("Module specific commands", getCommands(event.getGuild(), false), true).withTimestamp(Instant.now())
-                .appendField("Github", "https://github.com/hallopiu/wafflebot/", false);
+                .appendField("Commands", this.getCommands(event.getGuild(), true), true);
+        if(!event.getChannel().isPrivate())
+            builder.appendField("Module specific commands", getCommands(event.getGuild(), false), true).withTimestamp(Instant.now());
+        else
+            builder.appendField("Module specific commands (All enabled in PMs)", getPMCommands(), true);
+        builder.appendField("Github", "https://github.com/hallopiu/wafflebot/", false);
         MessageUtil.sendMessage(event.getChannel(), builder.build());
+    }
+
+    private String getPMCommands() {
+        String result = "";
+        for(BotModule bm : BotModule.modules) {
+            if(bm instanceof CommandModule) {
+                CommandModule m = (CommandModule) bm;
+                if(m.isShowInHelp() && m.isServerModule() && !m.isGuildOnly()) {
+                    result += m.getCommand() + "\n";
+                    if(!m.getAliases().isEmpty())
+                        for(String alias : m.getAliases())
+                            result += alias + "\n";
+                }
+            }
+        }
+        return result;
     }
 
     private String getCommands(IGuild g, boolean global) {

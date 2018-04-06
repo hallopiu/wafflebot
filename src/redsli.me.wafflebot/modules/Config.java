@@ -29,6 +29,7 @@ public class Config extends CommandModule {
         super("Wafflebot Configuration Module", "Allows you to tell Wafflebot to (un)ignore specific channels and setting default channels for automated modules", true, false);
         trigger("!config");
         setShowInHelp(true);
+        setGuildOnly(true);
     }
 
     @Override

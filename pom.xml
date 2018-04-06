@@ -83,6 +83,11 @@
             <artifactId>prettytime</artifactId>
             <version>3.2.7.Final</version>
         </dependency>
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
+            <version>1.9.0</version>
+        </dependency>
 
     </dependencies>
     <description>A module-based Discord bot</description>

@@ -21,8 +21,9 @@ public class MessageEvent extends Event implements IListener<sx.blah.discord.han
     public void handle(sx.blah.discord.handle.impl.events.guild.channel.message.MessageEvent event) {
         try {
             for(BotModule bm : BotModule.modules) {
-                if(Wafflebot.data.isIgnored(event.getGuild(), event.getChannel()) && !(bm instanceof Config))
-                    continue;
+                if(!event.getChannel().isPrivate())
+                    if(Wafflebot.data.isIgnored(event.getGuild(), event.getChannel()) && !(bm instanceof Config))
+                        continue;
                 if(event instanceof MessageReceivedEvent) {
                     if(bm instanceof CommandModule) {
                         CommandModule cm = (CommandModule) bm;

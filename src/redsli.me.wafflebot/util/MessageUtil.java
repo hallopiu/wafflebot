@@ -85,7 +85,14 @@ public class MessageUtil {
     public static void sendErrorReport(Exception e, @Nullable MessageEvent event) {
         e.printStackTrace();
         IUser redslime = Wafflebot.client.getUserByID(OWNER);
-        WaffleEmbedBuilder builder = EmbedPresets.error(e.getClass().getName(), ExceptionUtils.getStackTrace(e) + "", event != null ? "#" + event.getMessage().getChannel().getName() + " - " + event.getMessage().getGuild().getName() : null);
+        String footer = null;
+        if(event != null) {
+            if(!event.getChannel().isPrivate())
+                footer = "#" + event.getMessage().getChannel().getName() + " - " + event.getMessage().getGuild().getName();
+            else
+                footer = "@" + event.getAuthor().getName();
+        }
+        WaffleEmbedBuilder builder = EmbedPresets.error(e.getClass().getName(), ExceptionUtils.getStackTrace(e) + "", footer);
         if(event != null) {
             if(event.getAuthor().getNicknameForGuild(event.getGuild()) != null)
                 builder.withAuthorName(event.getAuthor().getNicknameForGuild(event.getGuild()) + " (" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator() + ")");
