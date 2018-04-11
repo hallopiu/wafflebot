@@ -53,27 +53,31 @@ public class CTFMaps extends CommandModule {
         }.getType());
         reader.close();
 
-        if(request.matches("([0-9]*)")) {
-            int id = Integer.valueOf(request);
-            MapEntry map = null;
-            for(MapEntry m : maps) if(m.map_id == id) map = m;
+        try {
+            if(request.matches("([0-9]*)")) {
+                int id = Integer.valueOf(request);
+                MapEntry map = null;
+                for(MapEntry m : maps) if(m.map_id == id) map = m;
 
-            if(map != null) {
-                MessageUtil.sendMessage(event, EmbedPresets.information().withTimestamp(System.currentTimeMillis()).withUserFooter(event).withTitle("Found 1 map").withDesc(map.name + " (" + map.map_id + ")"));
-            } else
-                MessageUtil.sendMessage(event, EmbedPresets.error("Map not found (searched for map id)"));
-        } else {
-            List<MapEntry> map = new ArrayList<>();
-            for(MapEntry m : maps) if(m.name.toLowerCase().contains(request.toLowerCase())) map.add(m);
+                if(map != null) {
+                    MessageUtil.sendMessage(event, EmbedPresets.information().withTimestamp(System.currentTimeMillis()).withUserFooter(event).withTitle("Found 1 map").withDesc(map.name + " (" + map.map_id + ")"));
+                } else
+                    MessageUtil.sendMessage(event, EmbedPresets.error("Map not found (searched for map id)"));
+            } else {
+                List<MapEntry> map = new ArrayList<>();
+                for(MapEntry m : maps) if(m.name.toLowerCase().contains(request.toLowerCase())) map.add(m);
 
-            if(!map.isEmpty()) {
-                String title = "";
-                for(MapEntry m : map) {
-                    title += m.map_id + " (" + m.name + ")\n";
-                }
-                MessageUtil.sendMessage(event, EmbedPresets.information().withTimestamp(System.currentTimeMillis()).withUserFooter(event).withDesc(title).withTitle("Found " + map.size() + " map(s)"));
-            } else
-                MessageUtil.sendMessage(event, EmbedPresets.error("Map not found (searched for map name)"));
+                if(!map.isEmpty()) {
+                    String title = "";
+                    for(MapEntry m : map) {
+                        title += m.map_id + " (" + m.name + ")\n";
+                    }
+                    MessageUtil.sendMessage(event, EmbedPresets.information().withTimestamp(System.currentTimeMillis()).withUserFooter(event).withDesc(title).withTitle("Found " + map.size() + " map(s)"));
+                } else
+                    MessageUtil.sendMessage(event, EmbedPresets.error("Map not found (searched for map name)"));
+            }
+        } catch (IllegalArgumentException e) {
+            MessageUtil.sendMessage(event, EmbedPresets.error("Way too many maps. Seriously, the message would be longer than Discord's character limit."));
         }
     }
 
