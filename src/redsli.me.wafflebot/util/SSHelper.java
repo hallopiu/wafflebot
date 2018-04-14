@@ -79,7 +79,6 @@ public class SSHelper {
                 continue;
 
             Cell end = cell.getRelative(Direction.DOWN);
-            System.out.println(end);
             while (end != null && end.string != null && end.string.trim().equals("^")) {
                 if(end.getRelative(Direction.DOWN) == null)
                     break;

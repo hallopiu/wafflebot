@@ -5,8 +5,9 @@ import redsli.me.wafflebot.module.CommandModule;
 import redsli.me.wafflebot.module.annotations.Module;
 import redsli.me.wafflebot.util.EmbedPresets;
 import redsli.me.wafflebot.util.MessageUtil;
-import redsli.me.wafflebot.util.MinecraftHelper;
+import redsli.me.wafflebot.util.SSHelper;
 import redsli.me.wafflebot.util.WaffleEmbedBuilder;
+import redsli.me.wafflebot.util.MinecraftHelper;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 
@@ -31,20 +32,23 @@ public class CTF extends CommandModule {
     public void onUse(MessageReceivedEvent event) throws Exception {
         IMessage loading = MessageUtil.sendMessage(event.getChannel(), EmbedPresets.loading(":signal_strength: Checking...").build());
         new Thread(() -> {
-            WaffleEmbedBuilder eb = EmbedPresets.success("CTF Server Status", null);
-            for(int i = 1; i < 5; i++) {
-                try {
+            try {
+                WaffleEmbedBuilder eb = EmbedPresets.success("CTF Server Status", null);
+                String match = "";
+                SSHelper.Match m = SSHelper.getNow();
+                if(m != null)
+                    match = "(" + m.name + ")";
+                for(int i = 1; i < 5; i++) {
                     Info info = getCTF(i);
-                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match", "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n" +
+                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n" +
                             "State: " + humanCTF(info.getMotds().getClean()).split("/")[0].replace("> ", "") + "\n" +
                             "Map: " + humanCTF(info.getMotds().getClean()).split("/")[1].substring(2), false);
-                } catch (Exception e) {
-                    MessageUtil.sendErrorReport(e, event);
-                    MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
-                    return;
                 }
+                MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
+            } catch (Exception e) {
+                MessageUtil.sendErrorReport(e, event);
+                MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
             }
-            MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
         }).start();
     }
 
