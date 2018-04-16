@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -24,7 +27,7 @@ public class SSHelper {
     public static final int ROW_DATE = 0;
     public static final int ROW_DAY = 1;
     public static final int COLUMN_TIME = 0;
-    public static final int MAX_ROW = 50;
+    public static final int MAX_ROW = 49;
     public static final int MAX_COLUMN = 18;
 
     private static ValueRange vr;
@@ -97,8 +100,9 @@ public class SSHelper {
     }
 
     public static Match getNow() throws IOException, ParseException {
-        Date now = Date.from(Instant.now());
-        return getMatches().stream().filter(m -> m.begin.getTime() <= now.getTime() && m.end.getTime() >= now.getTime()).findFirst().orElse(null);
+        Date now = new Date(System.currentTimeMillis());
+        Instant i = now.toInstant().plusMillis(TimeUnit.HOURS.toMillis(1));
+        return getMatches().stream().filter(m -> m.begin.getTime() <= i.getEpochSecond()*1000 && m.end.getTime() >= i.getEpochSecond()*1000).findFirst().orElse(null);
     }
 
     public static Match getNext() throws IOException, ParseException {
