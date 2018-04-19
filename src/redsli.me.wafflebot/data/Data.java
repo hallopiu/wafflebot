@@ -20,6 +20,7 @@ public class Data {
     public HashMap<Long, List<String>> guildModules = new HashMap<>();
     public List<BaseConfiguration> baseConfigurations = new ArrayList<>();
     public List<ModuleConfiguration> moduleConfigurations = new ArrayList<>();
+    public List<Reminder> reminders = new ArrayList<>();
 
     public void addModule(IGuild g, String moduleName) throws IOException {
         long id = g.getLongID();

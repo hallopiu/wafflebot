@@ -28,6 +28,7 @@ public abstract class CommandModule extends BotModule {
     long userFilter;
     long channelFilter;
     boolean hideCommandInModuleInfo;
+    String usage;
 
     public CommandModule(String name, String description, boolean activatedDefault, boolean serverModule) {
         super(name, description, activatedDefault, serverModule);
@@ -103,6 +104,10 @@ public abstract class CommandModule extends BotModule {
             return super.isActive(guild);
         else
             return super.isActive(guild) && guild.getLongID() == guildFilter;
+    }
+
+    public String getUsage() {
+        return "Expected: " + usage;
     }
 
     public abstract void onUse(MessageReceivedEvent event) throws Exception;

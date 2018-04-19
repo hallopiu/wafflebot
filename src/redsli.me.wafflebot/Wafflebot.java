@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.reflections.Reflections;
 import redsli.me.wafflebot.data.Data;
+import redsli.me.wafflebot.data.Reminder;
 import redsli.me.wafflebot.events.JoinEvent;
 import redsli.me.wafflebot.events.MessageEvent;
 import redsli.me.wafflebot.events.ReadyEvent;
@@ -46,6 +47,8 @@ public class Wafflebot {
             data = loadedData;
         else
             data = new Data();
+
+        Reminder.initialize();
     }
 
     public static void save() throws IOException {

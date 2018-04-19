@@ -14,6 +14,7 @@ public class EmbedPresets {
     public static final Color LOADING = Color.ORANGE;
     public static final Color INFORMATION = Color.CYAN;
     public static final Color BROADCAST = Color.MAGENTA;
+    public static final Color REMINDER = Color.PINK;
 
     public static WaffleEmbedBuilder error(@Nullable String header, @Nullable String body, @Nullable String footer) {
         WaffleEmbedBuilder builder = new WaffleEmbedBuilder().withColor(ERROR).withTimestamp(System.currentTimeMillis());
@@ -59,6 +60,10 @@ public class EmbedPresets {
 
     public static WaffleEmbedBuilder information() {
         return new WaffleEmbedBuilder().withColor(INFORMATION);
+    }
+
+    public static WaffleEmbedBuilder reminder() {
+        return new WaffleEmbedBuilder().withColor(REMINDER).withTitle(":alarm_clock: Reminder");
     }
 
     public static WaffleEmbedBuilder broadcast() {
