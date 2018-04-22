@@ -52,7 +52,7 @@ public class Reminder {
             @Override
             public void run() {
                 MessageUtil.sendPM(Wafflebot.client.getUserByID(owner), EmbedPresets.reminder().withDesc(message)
-                        .withFooterText("Scheduled in #" + Wafflebot.client.getChannelByID(channel).getName() + " / " + Wafflebot.client.getChannelByID(channel).getGuild().getName()));
+                        .withFooterText(Wafflebot.client.getChannelByID(channel).isPrivate() ? "Scheduled here" : "Scheduled in #" + Wafflebot.client.getChannelByID(channel).getName() + " / " + Wafflebot.client.getChannelByID(channel).getGuild().getName()));
                 sent = true;
                 try {
                     Wafflebot.save();
