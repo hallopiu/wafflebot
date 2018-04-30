@@ -7,10 +7,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by redslime on 29.03.2018
@@ -21,6 +18,7 @@ public class Data {
     public List<BaseConfiguration> baseConfigurations = new ArrayList<>();
     public List<ModuleConfiguration> moduleConfigurations = new ArrayList<>();
     public List<Reminder> reminders = new ArrayList<>();
+    public List<UUIDCacheItem> uuids = new ArrayList<>();
 
     public void addModule(IGuild g, String moduleName) throws IOException {
         long id = g.getLongID();
@@ -105,5 +103,9 @@ public class Data {
             return c.ignoreChannels.contains(channel.getLongID());
         } else
             return false;
+    }
+
+    public Optional<UUIDCacheItem> getLatestUuidCacheItem(String name) {
+        return uuids.stream().filter(i -> i.name.equalsIgnoreCase(name) && !i.isOutdated()).findFirst();
     }
 }
