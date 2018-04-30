@@ -20,7 +20,7 @@ import java.util.Date;
 @Module
 public class Namehistory extends CommandModule {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-DD @ HH:mm z");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-dd @ HH:mm z");
 
     public Namehistory() {
         super("Minecraft Name History Lookup Module", "Look up a player's name history", false, true);
