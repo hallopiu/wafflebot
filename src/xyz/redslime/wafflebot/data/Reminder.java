@@ -37,7 +37,7 @@ public class Reminder {
     }
 
     public static void initialize() {
-        Wafflebot.data.reminders.removeIf(r -> r.getTimestamp() < System.currentTimeMillis() && r.sent);
+        Wafflebot.data.reminders.removeIf(r -> (r.getTimestamp() < System.currentTimeMillis() && r.sent) || (Wafflebot.client.getChannelByID(r.channel) == null));
         Wafflebot.data.reminders.forEach(Reminder::schedule);
     }
 
