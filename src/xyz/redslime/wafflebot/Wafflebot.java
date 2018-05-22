@@ -67,7 +67,7 @@ public class Wafflebot {
         client.getDispatcher().registerListener(new JoinEvent());
 
         // register modules
-        Reflections reflections = new Reflections("redsli.me.wafflebot.modules");
+        Reflections reflections = new Reflections("xyz.redslime.wafflebot.modules");
         for(Class<?> o : reflections.getTypesAnnotatedWith(Module.class))
             o.newInstance();
 
