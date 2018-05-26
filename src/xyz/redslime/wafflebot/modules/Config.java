@@ -1,5 +1,6 @@
 package xyz.redslime.wafflebot.modules;
 
+import sx.blah.discord.handle.obj.IGuild;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.module.CommandModule;
@@ -41,6 +42,7 @@ public class Config extends CommandModule {
     public void onUse(MessageReceivedEvent event) throws Exception {
         String msg = event.getMessage().getContent();
         String[] args = msg.split(" ");
+        IGuild guild = event.getGuild();
 
         if(args.length == 2 && args[1].equalsIgnoreCase("get")) {
             WaffleEmbedBuilder embed = EmbedPresets.information().withTitle("Wafflebot configuration in " + event.getGuild().getName()).withThumbnail(event.getGuild().getIconURL())
@@ -63,8 +65,8 @@ public class Config extends CommandModule {
 
             MessageUtil.sendMessage(event, embed);
         } else if(args.length == 3) {
-            if(DiscordHelper.isChannel(args[2])) {
-                IChannel channel = DiscordHelper.getChannel(args[2]);
+            if(DiscordHelper.isChannel(guild, args[2])) {
+                IChannel channel = DiscordHelper.getChannel(guild, args[2]);
                 switch (args[1].toLowerCase().trim()) {
                     case "ignore": {
                         Wafflebot.data.ignoreChannel(event.getGuild(), channel);
@@ -84,8 +86,8 @@ public class Config extends CommandModule {
         } else if(args.length == 4 && args[1].equalsIgnoreCase("setchannel")) {
             if(BotModule.get(args[2]) != null) {
                 if(BotModule.get(args[2]).isUsesOutputChannel()) {
-                    if(DiscordHelper.isChannel(args[3])) {
-                        IChannel channel = DiscordHelper.getChannel(args[3]);
+                    if(DiscordHelper.isChannel(guild, args[3])) {
+                        IChannel channel = DiscordHelper.getChannel(guild, args[3]);
                         Wafflebot.data.setModuleChannel(args[2], channel);
                         MessageUtil.sendMessage(event, EmbedPresets.success("Channel set!"));
                         Wafflebot.save();

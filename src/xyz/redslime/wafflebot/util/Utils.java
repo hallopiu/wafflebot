@@ -1,11 +1,14 @@
 package xyz.redslime.wafflebot.util;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by redslime on 30.03.2018
@@ -56,5 +59,17 @@ public class Utils {
         sb.insert(23, "-");
 
         return sb.toString();
+    }
+
+    public static long getLong(String str) {
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            return -1L;
+        }
+    }
+
+    public static long getSecs(long duration) {
+        return TimeUnit.MILLISECONDS.toSeconds(duration);
     }
 }

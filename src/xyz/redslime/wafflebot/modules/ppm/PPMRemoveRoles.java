@@ -1,5 +1,7 @@
 package xyz.redslime.wafflebot.modules.ppm;
 
+import sx.blah.discord.util.RequestBuilder;
+import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
 import xyz.redslime.wafflebot.util.EmbedPresets;
@@ -8,6 +10,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
+import xyz.redslime.wafflebot.util.Utils;
 
 import static xyz.redslime.wafflebot.data.HamzaPPM.*;
 
@@ -36,22 +39,22 @@ public class PPMRemoveRoles extends CommandModule {
         IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Removing roles"));
         IRole red = event.getGuild().getRoleByID(RED_TEAM);
         IRole blue = event.getGuild().getRoleByID(BLUE_TEAM);
-
-        new Thread(() -> {
-            try {
-                for(IUser user : event.getGuild().getUsersByRole(red)) {
-                    user.removeRole(red);
-                    Thread.sleep(1000);
-                }
-                for(IUser user : event.getGuild().getUsersByRole(blue)) {
-                    user.removeRole(blue);
-                    Thread.sleep(1000);
-                }
-
-                MessageUtil.editMessage(loading, EmbedPresets.success("Red/Blue Team Roles removed").withUserFooter(event));
-            } catch (Exception e) {
-                MessageUtil.sendErrorReport(e, event);
-            }
-        }).start();
+        long started = System.currentTimeMillis();
+        RequestBuilder builder = new RequestBuilder(Wafflebot.client);
+        builder.shouldBufferRequests(true);
+        builder.doAction(() -> {
+            event.getGuild().getUsersByRole(red).forEach(user -> user.removeRole(red));
+            event.getGuild().getUsersByRole(blue).forEach(user -> user.removeRole(blue));
+            return true;
+        }).andThen(() -> {
+            MessageUtil.editMessage(loading, EmbedPresets.success("Red/Blue Team Roles removed").withUserFooter(event));
+            return true;
+        }).onDiscordError(e -> {
+            MessageUtil.sendErrorReport(e, event);
+        }).onGeneralError(e -> {
+            MessageUtil.sendErrorReport(e, event);
+        }).onMissingPermissionsError(e -> {
+            MessageUtil.sendErrorReport(e, event);
+        }).execute();
     }
 }

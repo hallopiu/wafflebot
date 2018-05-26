@@ -35,27 +35,33 @@ public class DiscordHelper {
         return result;
     }
 
-    public static boolean isRole(String role) {
-        return role.matches(ROLE_REGEX) || role.matches(ROLE_REGEX_FRONT);
+    public static boolean isRole(IGuild guild, String role) {
+        return getRole(guild, role) != null;
     }
 
-    public static boolean isUser(String user) {
-        return user.matches(USER_REGEX) || user.matches(USER_REGEX_FRONT);
+    public static boolean isUser(IGuild guild, String user) {
+        return getUser(guild, user) != null;
     }
 
-    public static boolean isChannel(String channel) {
-        return channel.matches(CHANNEL_REGEX) || channel.matches(CHANNEL_REGEX_FRONT);
+    public static boolean isChannel(IGuild guild, String channel) {
+        return getChannel(guild, channel) != null;
     }
 
-    public static IRole getRole(String role) {
+    private static IRole getRole(String role) {
+        if(!Utils.isNumber(role))
+            return null;
         return Wafflebot.client.getGuildByID(HamzaPPM.PPM_SERVER).getRoleByID(Long.parseLong(role.replaceAll(ROLE_REGEX, "$1").trim()));
     }
 
-    public static IUser getUser(String user) {
+    private static IUser getUser(String user) {
+        if(!Utils.isNumber(user))
+            return null;
         return Wafflebot.client.getUserByID(Long.parseLong(user.replaceAll(USER_REGEX, "$1").trim()));
     }
 
-    public static IChannel getChannel(String channel) {
+    private static IChannel getChannel(String channel) {
+        if(!Utils.isNumber(channel))
+            return null;
         return Wafflebot.client.getChannelByID(Long.parseLong(channel.replaceAll(CHANNEL_REGEX, "$1").trim()));
     }
 
@@ -75,6 +81,8 @@ public class DiscordHelper {
         if(channel instanceof Long)
             return Wafflebot.client.getChannelByID((Long) channel);
         if(channel instanceof String) {
+            if(Utils.getLong((String) channel) != -1L)
+                return Wafflebot.client.getChannelByID(Utils.getLong((String) channel));
             IChannel possibleResult = getChannel((String) channel);
             if(possibleResult != null)
                 return possibleResult;
@@ -96,6 +104,8 @@ public class DiscordHelper {
         if(user instanceof Long)
             return Wafflebot.client.getUserByID((Long) user);
         if(user instanceof String) {
+            if(Utils.getLong((String) user) != -1L)
+                return Wafflebot.client.getUserByID(Utils.getLong((String) user));
             IUser possibleUser = getUser((String) user);
             if(possibleUser != null)
                 return possibleUser;
@@ -119,6 +129,8 @@ public class DiscordHelper {
         if(role instanceof Long)
             return Wafflebot.client.getRoleByID((Long) role);
         if(role instanceof String) {
+            if(Utils.getLong((String) role) != -1L)
+                return Wafflebot.client.getRoleByID(Utils.getLong((String) role));
             if(((String) role).equalsIgnoreCase("@everyone"))
                 return guild.getEveryoneRole();
             IRole possibleRole = getRole((String) role);
