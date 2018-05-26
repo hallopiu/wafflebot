@@ -1,5 +1,9 @@
 package xyz.redslime.wafflebot.modules.ppm;
 
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.util.RequestBuffer;
+import sx.blah.discord.util.RequestBuilder;
+import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.data.HamzaPPM;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
@@ -43,6 +47,7 @@ public class PPMSetRoles extends CommandModule {
         String msg = event.getMessage().getContent();
         String[] lines = msg.split("\n");
         IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Setting roles..."));
+        IGuild guild = event.getGuild();
 
         new Thread(() -> {
             try {
@@ -54,12 +59,12 @@ public class PPMSetRoles extends CommandModule {
                         continue;
 
                     if(DiscordHelper.isRole(line.trim())) {
-                        currentTeam = DiscordHelper.getRole(line);
+                        currentTeam = DiscordHelper.getRole(guild, line);
                         continue;
                     }
 
                     if(DiscordHelper.isUser(line.trim())) {
-                        IUser u = DiscordHelper.getUser(line);
+                        IUser u = DiscordHelper.getUser(guild, line);
                         if(u != null && HamzaPPM.isTeamRole(currentTeam) && !u.hasRole(currentTeam)) {
                             u.addRole(currentTeam);
                             rolesSet++;
