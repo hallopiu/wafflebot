@@ -47,24 +47,6 @@ public class DiscordHelper {
         return getChannel(guild, channel) != null;
     }
 
-    private static IRole getRole(String role) {
-        if(!Utils.isNumber(role))
-            return null;
-        return Wafflebot.client.getGuildByID(HamzaPPM.PPM_SERVER).getRoleByID(Long.parseLong(role.replaceAll(ROLE_REGEX, "$1").trim()));
-    }
-
-    private static IUser getUser(String user) {
-        if(!Utils.isNumber(user))
-            return null;
-        return Wafflebot.client.getUserByID(Long.parseLong(user.replaceAll(USER_REGEX, "$1").trim()));
-    }
-
-    private static IChannel getChannel(String channel) {
-        if(!Utils.isNumber(channel))
-            return null;
-        return Wafflebot.client.getChannelByID(Long.parseLong(channel.replaceAll(CHANNEL_REGEX, "$1").trim()));
-    }
-
     public static int getHighestRoleColor(ReactionEvent e) {
         int pos = 0;
         int rgb = 0;
@@ -83,9 +65,8 @@ public class DiscordHelper {
         if(channel instanceof String) {
             if(Utils.getLong((String) channel) != -1L)
                 return Wafflebot.client.getChannelByID(Utils.getLong((String) channel));
-            IChannel possibleResult = getChannel((String) channel);
-            if(possibleResult != null)
-                return possibleResult;
+            if(((String) channel).trim().matches(CHANNEL_REGEX))
+                return Wafflebot.client.getChannelByID(Long.parseLong(((String) channel).trim().replaceAll(CHANNEL_REGEX, "$1")));
             if(((String) channel).matches(CHANNEL_REGEX_FRONT)) {
                 for(IChannel c : guild.getChannels()) {
                     if(c.getName().equalsIgnoreCase(((String) channel).replaceAll(CHANNEL_REGEX_FRONT, "$1")))
@@ -106,9 +87,8 @@ public class DiscordHelper {
         if(user instanceof String) {
             if(Utils.getLong((String) user) != -1L)
                 return Wafflebot.client.getUserByID(Utils.getLong((String) user));
-            IUser possibleUser = getUser((String) user);
-            if(possibleUser != null)
-                return possibleUser;
+            if(((String) user).trim().matches(USER_REGEX))
+                return Wafflebot.client.getUserByID(Long.parseLong(((String) user).replaceAll(USER_REGEX, "$1").trim()));
             if(((String) user).matches(USER_REGEX_FRONT)) {
                 String name = ((String) user).replaceAll(USER_REGEX_FRONT, "$1");
                 String discriminator = ((String) user).replaceAll(USER_REGEX_FRONT, "$2");
@@ -133,9 +113,8 @@ public class DiscordHelper {
                 return Wafflebot.client.getRoleByID(Utils.getLong((String) role));
             if(((String) role).equalsIgnoreCase("@everyone"))
                 return guild.getEveryoneRole();
-            IRole possibleRole = getRole((String) role);
-            if(possibleRole != null)
-                return possibleRole;
+            if(((String) role).trim().matches(ROLE_REGEX))
+                return Wafflebot.client.getRoleByID(Long.parseLong(((String) role).trim().replaceAll(ROLE_REGEX, "$1")));
             if(((String) role).matches(ROLE_REGEX_FRONT)) {
                 for(IRole r : guild.getRoles()) {
                     if(r.getName().equalsIgnoreCase(((String) role).replaceAll(ROLE_REGEX_FRONT, "$1")))

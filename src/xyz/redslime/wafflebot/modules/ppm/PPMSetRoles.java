@@ -65,7 +65,7 @@ public class PPMSetRoles extends CommandModule {
 
                 if(DiscordHelper.isUser(guild, line)) {
                     IUser u = DiscordHelper.getUser(guild, line);
-                    if(u != null && HamzaPPM.isTeamRole(currentTeam.get()) && !u.hasRole(currentTeam.get())) {
+                    if(HamzaPPM.isTeamRole(currentTeam.get()) && !u.hasRole(currentTeam.get())) {
                         u.addRole(currentTeam.get());
                         rolesSet.getAndIncrement();
                     } else
@@ -83,13 +83,21 @@ public class PPMSetRoles extends CommandModule {
                 if(!skippedLines.isEmpty()) {
                     body.append("\n\nSkipped ").append(skippedLines.size()).append(" line(s):");
                     for(String l : skippedLines)
-                        body.append("\n\"").append(l).append("\"");
+                        body.append("\n").append(l);
                 }
 
                 WaffleEmbedBuilder embed = EmbedPresets.success(body.toString()).withUserFooter(event);
                 MessageUtil.editMessage(loading, embed);
-            } else
-                MessageUtil.editMessage(loading, EmbedPresets.error("No users found, did you tag them?"));
+            } else {
+                if(skippedLines.isEmpty())
+                    MessageUtil.editMessage(loading, EmbedPresets.error("No users found, did you tag them?"));
+                else {
+                    StringBuilder sl = new StringBuilder();
+                    for(String l : skippedLines)
+                        sl.append("\n").append(l);
+                    MessageUtil.editMessage(loading, EmbedPresets.error("No users found, did you tag them?\nSkipped line(s):" + sl.toString()));
+                }
+            }
             return true;
         }).onDiscordError(e -> {
             MessageUtil.editMessage(loading, EmbedPresets.error(e.getClass().getName()));
