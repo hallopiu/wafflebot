@@ -40,7 +40,7 @@ public class JoinEvent implements IListener<GuildCreateEvent> {
             for(BotModule bm : BotModule.modules) {
                 if(bm.isActivatedDefault()) {
                     try {
-                        bm.enable(event.getGuild(), bm.getClass().getSimpleName().toLowerCase());
+                        bm.enable(event.getGuild());
                     } catch (IOException e) {
                         MessageUtil.sendErrorReport(e, null);
                     }

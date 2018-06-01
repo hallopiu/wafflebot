@@ -19,19 +19,19 @@ public class ReadyEvent implements IListener<sx.blah.discord.handle.impl.events.
             for(IGuild g : Wafflebot.client.getGuilds()) {
                 for(BotModule module : BotModule.modules) {
                     if(!module.isServerModule()) {
-                        module.enable(g, module.getClass().getSimpleName().toLowerCase());
+                        module.enable(g);
                     } else {
                         Data data = Wafflebot.data;
 
                         if(data.guildModules.get(g.getLongID()) != null) {
                             // data saved for this guild
                             if(data.guildModules.get(g.getLongID()).contains(module.getClass().getSimpleName().toLowerCase())) {
-                                module.enable(g, module.getClass().getSimpleName().toLowerCase());
+                                module.enable(g);
                             }
                         } else {
                             // no data saved for this guild
                             if(module.isActivatedDefault())
-                                module.enable(g, module.getClass().getSimpleName().toLowerCase());
+                                module.enable(g);
                         }
                     }
                 }

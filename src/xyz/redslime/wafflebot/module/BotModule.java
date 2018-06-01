@@ -47,19 +47,22 @@ public abstract class BotModule {
         return null;
     }
 
-    public void disable(IGuild guild, String name) throws IOException {
+    public void disable(IGuild guild) throws IOException {
+        String name = this.getClass().getSimpleName();
         System.out.println("Disabled module " + name + " in guild " + guild.getName() + " (" + guild.getLongID() + ")");
         guilds.remove(guild.getLongID());
-        Wafflebot.data.removeModule(guild, name);
+        Wafflebot.data.removeModule(guild, name.toLowerCase());
     }
 
-    public void enable(IGuild guild, String name) throws IOException {
+    public boolean enable(IGuild guild) throws IOException {
+        String name = this.getClass().getSimpleName();
         if(guildLimit != 0)
             if(guildLimit != guild.getLongID())
-                return;
+                return false;
         System.out.println("Enabled module " + name + " in guild " + guild.getName() + " (" + guild.getLongID() + ")");
         guilds.add(guild.getLongID());
-        Wafflebot.data.addModule(guild, name);
+        Wafflebot.data.addModule(guild, name.toLowerCase());
+        return true;
     }
 
     public void limit(long guildId) {
