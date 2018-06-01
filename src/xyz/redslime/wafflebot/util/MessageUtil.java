@@ -18,22 +18,12 @@ public class MessageUtil {
     public static final long OWNER = 115834525329653760L;
 
     public static IMessage sendMessage(IChannel channel, Object message) {
-        try {
-            if(message instanceof String)
-                return RequestBuffer.request(() -> {
-                    return channel.sendMessage((String) message);
-                }).get();
-            if(message instanceof EmbedObject)
-                return RequestBuffer.request(() -> {
-                    return channel.sendMessage((EmbedObject) message);
-                }).get();
-            if(message instanceof WaffleEmbedBuilder)
-                return RequestBuffer.request(() -> {
-                    return channel.sendMessage(((WaffleEmbedBuilder) message).build());
-                }).get();
-        } catch (Exception e) {
-            sendErrorReport(e, null);
-        }
+        if(message instanceof String)
+            return RequestBuffer.request(() -> channel.sendMessage((String) message)).get();
+        if(message instanceof EmbedObject)
+            return RequestBuffer.request(() -> channel.sendMessage((EmbedObject) message)).get();
+        if(message instanceof WaffleEmbedBuilder)
+            return RequestBuffer.request(() -> channel.sendMessage(((WaffleEmbedBuilder) message).build())).get();
         return null;
     }
 
@@ -42,43 +32,22 @@ public class MessageUtil {
     }
 
     public static IMessage editMessage(IMessage message, Object contents) {
-        try {
-            if(contents instanceof String)
-                return RequestBuffer.request(() -> {
-                    return message.edit((String) contents);
-                }).get();
-            if(contents instanceof EmbedObject)
-                return RequestBuffer.request(() -> {
-                    return message.edit((EmbedObject) contents);
-                }).get();
-            if(contents instanceof WaffleEmbedBuilder)
-                return RequestBuffer.request(() -> {
-                    return message.edit(((WaffleEmbedBuilder) contents).build());
-                }).get();
-        } catch (Exception e) {
-            sendErrorReport(e, null);
-        }
+        if(contents instanceof String)
+            return RequestBuffer.request(() -> message.edit((String) contents)).get();
+        if(contents instanceof EmbedObject)
+            return RequestBuffer.request(() -> message.edit((EmbedObject) contents)).get();
+        if(contents instanceof WaffleEmbedBuilder)
+            return RequestBuffer.request(() -> message.edit(((WaffleEmbedBuilder) contents).build())).get();
         return null;
     }
 
     public static IMessage sendPM(IUser user, Object message) {
-        try {
-            if(message instanceof String)
-                return RequestBuffer.request(() -> {
-                    return user.getOrCreatePMChannel().sendMessage((String) message);
-                }).get();
-            if(message instanceof EmbedObject)
-                return RequestBuffer.request(() -> {
-                    return user.getOrCreatePMChannel().sendMessage((EmbedObject) message);
-                }).get();
-            if(message instanceof WaffleEmbedBuilder)
-                return RequestBuffer.request(() -> {
-                    return user.getOrCreatePMChannel().sendMessage(((WaffleEmbedBuilder) message).build());
-                }).get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendErrorReport(e, null);
-        }
+        if(message instanceof String)
+            return RequestBuffer.request(() -> user.getOrCreatePMChannel().sendMessage((String) message)).get();
+        if(message instanceof EmbedObject)
+            return RequestBuffer.request(() -> user.getOrCreatePMChannel().sendMessage((EmbedObject) message)).get();
+        if(message instanceof WaffleEmbedBuilder)
+            return RequestBuffer.request(() -> user.getOrCreatePMChannel().sendMessage(((WaffleEmbedBuilder) message).build())).get();
         return null;
     }
 

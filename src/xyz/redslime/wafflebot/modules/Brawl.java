@@ -2,12 +2,14 @@ package xyz.redslime.wafflebot.modules;
 
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
+import xyz.redslime.wafflebot.util.EmbedPresets;
 import xyz.redslime.wafflebot.util.MessageUtil;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -51,16 +53,28 @@ public class Brawl extends CommandModule {
 
     @Override
     public void onUse(MessageReceivedEvent event) throws Exception {
-        String json = getJSONStatus();
-        String servers = "";
-        String total = "";
-        for(Map.Entry<String, Integer> entry : getServerValues(json).entrySet()) {
-            if(!entry.getKey().equalsIgnoreCase("total"))
-                servers += "\n:small_blue_diamond: **" + entry.getKey() + "** - " + entry.getValue();
-            else
-                total = "\n:small_orange_diamond: **Total** - " + entry.getValue();
-        }
-        MessageUtil.sendMessage(event.getChannel(), servers + total);
+        new Thread(() -> {
+            String json = null;
+            try {
+                json = getJSONStatus();
+            } catch (Exception e) {
+                if(e instanceof ConnectException)
+                    MessageUtil.sendMessage(event, EmbedPresets.error("Couldn't reach brawl.com"));
+                else {
+                    MessageUtil.sendErrorReport(e, event);
+                    MessageUtil.sendMessage(event, EmbedPresets.error(null, e.getClass().getName(), null));
+                }
+            }
+            String servers = "";
+            String total = "";
+            for(Map.Entry<String, Integer> entry : getServerValues(json).entrySet()) {
+                if(!entry.getKey().equalsIgnoreCase("total"))
+                    servers += "\n:small_blue_diamond: **" + entry.getKey() + "** - " + entry.getValue();
+                else
+                    total = "\n:small_orange_diamond: **Total** - " + entry.getValue();
+            }
+            MessageUtil.sendMessage(event.getChannel(), servers + total);
+        }).start();
     }
 
     private String getJSONStatus() throws Exception {

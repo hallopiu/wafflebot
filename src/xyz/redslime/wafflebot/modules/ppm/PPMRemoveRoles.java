@@ -39,7 +39,6 @@ public class PPMRemoveRoles extends CommandModule {
         IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Removing roles"));
         IRole red = event.getGuild().getRoleByID(RED_TEAM);
         IRole blue = event.getGuild().getRoleByID(BLUE_TEAM);
-        long started = System.currentTimeMillis();
         RequestBuilder builder = new RequestBuilder(Wafflebot.client);
         builder.shouldBufferRequests(true);
         builder.doAction(() -> {

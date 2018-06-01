@@ -50,7 +50,6 @@ public class PPMSetRoles extends CommandModule {
         AtomicReference<IRole> currentTeam = new AtomicReference<>();
         List<String> skippedLines = new ArrayList<>();
         AtomicInteger rolesSet = new AtomicInteger();
-        long started = System.currentTimeMillis();
         RequestBuilder builder = new RequestBuilder(Wafflebot.client);
         builder.shouldBufferRequests(true);
         builder.doAction(() -> {
@@ -68,15 +67,16 @@ public class PPMSetRoles extends CommandModule {
                     if(HamzaPPM.isTeamRole(currentTeam.get()) && !u.hasRole(currentTeam.get())) {
                         u.addRole(currentTeam.get());
                         rolesSet.getAndIncrement();
-                    } else
-                        skippedLines.add(line);
-                    continue;
+                        continue;
+                    }
                 }
 
-                skippedLines.add(line);
+                if(!(DiscordHelper.isRole(guild, line) || DiscordHelper.isUser(guild, line)))
+                    skippedLines.add(line);
             }
             return true;
         }).andThen(() -> {
+            Thread.sleep(200);
             if(rolesSet.get() > 0) {
                 StringBuilder body = new StringBuilder(rolesSet + " roles set!");
 

@@ -46,8 +46,12 @@ public class CTF extends CommandModule {
                 }
                 MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
             } catch (Exception e) {
-                MessageUtil.sendErrorReport(e, event);
-                MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
+                if(e instanceof ArrayIndexOutOfBoundsException)
+                    MessageUtil.editMessage(loading, EmbedPresets.error(null, "Failed to get CTF server data, are they down?", null));
+                else {
+                    MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
+                    MessageUtil.sendErrorReport(e, event);
+                }
             }
         }).start();
     }
