@@ -76,7 +76,6 @@ public class PPMSetRoles extends CommandModule {
             }
             return true;
         }).andThen(() -> {
-            Thread.sleep(200);
             if(rolesSet.get() > 0) {
                 StringBuilder body = new StringBuilder(rolesSet + " roles set!");
 
