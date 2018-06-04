@@ -17,6 +17,9 @@ import sx.blah.discord.handle.obj.IMessage;
 @Module
 public class CTF extends CommandModule {
 
+    private static final String STATE_REGEX = ".*Game.*|.*Starting soon!.*|.*restarting.*";
+    private static final String MAP_REGEX = "Map:.*";
+
     public CTF() {
         super("CTF Checker Module", "Checks server status of every CTF server", false, true);
         trigger("!ctf");
@@ -40,9 +43,16 @@ public class CTF extends CommandModule {
                     match = "(" + m.name + ")";
                 for(int i = 1; i < 5; i++) {
                     Info info = getCTF(i);
-                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n" +
-                            "State: " + humanCTF(info.getMotds().getClean()).split("/")[0].replace("> ", "") + "\n" +
-                            "Map: " + humanCTF(info.getMotds().getClean()).split("/")[1].substring(2), false);
+                    String state = humanCTF(info.getMotds().getClean()).split("/")[0].replace("> ", "");
+                    String map = humanCTF(info.getMotds().getClean()).split("/")[1].substring(2);
+                    String desc = "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n";
+                    if(state.matches(STATE_REGEX))
+                        desc += state;
+                    if(map.matches(MAP_REGEX))
+                        desc += "\n" + map.replace("Map: ", "");
+                    if(info.getPlayers().getMax() == 0)
+                        desc = "Offline";
+                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, desc, false);
                 }
                 MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
             } catch (Exception e) {
