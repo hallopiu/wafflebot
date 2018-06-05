@@ -47,9 +47,9 @@ public class CTF extends CommandModule {
                     String map = humanCTF(info.getMotds().getClean()).split("/")[1].substring(2);
                     String desc = "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n";
                     if(state.matches(STATE_REGEX))
-                        desc += state;
+                        desc += "State: " + state;
                     if(map.matches(MAP_REGEX))
-                        desc += "\n" + map.replace("Map: ", "");
+                        desc += "\n" + map;
                     if(info.getPlayers().getMax() == 0)
                         desc = "Offline";
                     eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, desc, false);
