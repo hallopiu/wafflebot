@@ -1,6 +1,7 @@
 package xyz.redslime.wafflebot.modules.ppm;
 
 import org.ocpsoft.prettytime.PrettyTime;
+import sx.blah.discord.handle.obj.IChannel;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
@@ -13,8 +14,11 @@ import sx.blah.discord.util.MessageHistory;
 import xyz.redslime.wafflebot.data.HamzaPPM;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by redslime on 01.04.2018
@@ -25,6 +29,7 @@ public class PPMActivity extends CommandModule {
     public PPMActivity() {
         super("PPM Host Activity Checker Module", "Checks activity of all PPM Hosts", true, true);
         trigger("!checkactivity");
+        aliases("!adminactivity");
         limit(HamzaPPM.PPM_SERVER);
         setGuildOnly(true);
         setGuildFilter(HamzaPPM.PPM_SERVER);
@@ -38,28 +43,54 @@ public class PPMActivity extends CommandModule {
 
     @Override
     public void onUse(MessageReceivedEvent event) throws Exception {
-        IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Loading..."));
-        String result = "Last PPM = date of last message sent in announcements containing \"ppm\"\n\n";
-        MessageHistory mh = event.getGuild().getChannelByID(HamzaPPM.ANNOUNCEMENTS).getFullMessageHistory();
+        IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Loading... This may take several minutes"));
         HashMap<IUser, Long> lastMessage = new HashMap<>();
-
-        for(IUser user : event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(HamzaPPM.PPM_HOST))) {
-            for(IMessage message : mh.asArray()) {
-                if(message.getAuthor().getLongID() == user.getLongID() && message.getContent().toLowerCase().contains("ppm")) {
-                    long timestamp = message.getTimestamp().toEpochMilli();
-                    if(lastMessage.containsKey(user)) {
-                        if(lastMessage.get(user) < timestamp)
-                            lastMessage.put(user, timestamp);
-                    } else
-                        lastMessage.put(user, timestamp);
+        new Thread(() -> {
+            String result = "";
+            if(event.getMessage().getContent().toLowerCase().startsWith("!checkactivity")) {
+                result = "Last PPM = date of last message sent in announcements containing \"ppm\"\n\n";
+                MessageHistory mh = event.getGuild().getChannelByID(HamzaPPM.ANNOUNCEMENTS).getFullMessageHistory();
+                for(IUser user : event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(HamzaPPM.PPM_HOST))) {
+                    for(IMessage message : mh.asArray()) {
+                        if(message.getAuthor().getLongID() == user.getLongID() && message.getContent().toLowerCase().contains("ppm")) {
+                            long timestamp = message.getTimestamp().toEpochMilli();
+                            if(lastMessage.containsKey(user)) {
+                                if(lastMessage.get(user) < timestamp)
+                                    lastMessage.put(user, timestamp);
+                            } else
+                                lastMessage.put(user, timestamp);
+                        }
+                    }
+                    if(lastMessage.containsKey(user))
+                        result += user.mention() + "'s last PPM: " + new PrettyTime().format(new Date(lastMessage.get(user))) + " (" + new SimpleDateFormat("YYYY-MM-dd").format(new Date(lastMessage.get(user))) + ")\n";
+                    else
+                        result += user.mention() + "'s last PPM: unknown\n";
+                }
+            } else {
+                result = "Last message in any chat\n\n";
+                List<IUser> admins = event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(HamzaPPM.ADMIN));
+                for(IChannel c : event.getGuild().getChannels()) {
+                    MessageHistory mh = c.getMessageHistoryTo(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(60));
+                    for(IMessage m : mh.asArray()) {
+                        if(admins.contains(m.getAuthor())) {
+                            long timestamp = m.getTimestamp().toEpochMilli();
+                            if(lastMessage.containsKey(m.getAuthor())) {
+                                if(lastMessage.get(m.getAuthor()) < timestamp)
+                                    lastMessage.put(m.getAuthor(), timestamp);
+                            } else
+                                lastMessage.put(m.getAuthor(), timestamp);
+                        }
+                    }
+                }
+                for(IUser admin : admins) {
+                    if(lastMessage.containsKey(admin))
+                        result += admin.mention() + "'s last message: " + new PrettyTime().format(new Date(lastMessage.get(admin))) + " (" + new SimpleDateFormat("YYYY-MM-dd").format(new Date(lastMessage.get(admin))) + ")\n";
+                    else
+                        result += admin.mention() + "'s last message: longer than 2 months ago\n";
                 }
             }
-            if(lastMessage.containsKey(user))
-                result += user.mention() + "'s last PPM: " + new PrettyTime().format(new Date(lastMessage.get(user))) + " (" + new SimpleDateFormat("YYYY-MM-dd").format(new Date(lastMessage.get(user))) + ")\n";
-            else
-                result += user.mention() + "'s last PPM: unknown\n";
-        }
+            MessageUtil.editMessage(loading, EmbedPresets.success(result).withUserFooter(event));
+        }).start();
 
-        MessageUtil.editMessage(loading, EmbedPresets.success(result).withUserFooter(event));
     }
 }
