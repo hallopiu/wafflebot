@@ -93,6 +93,8 @@ public class DiscordHelper {
                 String name = ((String) user).replaceAll(USER_REGEX_FRONT, "$1");
                 String discriminator = ((String) user).replaceAll(USER_REGEX_FRONT, "$2");
                 for(IUser u : guild.getUsers()) {
+                    if(u.getNicknameForGuild(guild) != null && u.getNicknameForGuild(guild).equalsIgnoreCase(name) && u.getDiscriminator().equalsIgnoreCase(discriminator))
+                        return u;
                     if(u.getName().equalsIgnoreCase(name) && u.getDiscriminator().equalsIgnoreCase(discriminator))
                         return u;
                 }

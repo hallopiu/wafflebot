@@ -75,6 +75,7 @@ public class CTFSS extends CommandModule {
             }
 
             WaffleEmbedBuilder result = EmbedPresets.success().withUserFooter(event);
+            int fields = 0;
             for(SSHelper.Match match : matches) {
                 SimpleDateFormat date = new SimpleDateFormat("MMMM d");
                 date.setTimeZone(TimeZone.getTimeZone("EST"));
@@ -82,9 +83,18 @@ public class CTFSS extends CommandModule {
                 SimpleDateFormat time = new SimpleDateFormat("h:mma");
                 time.setTimeZone(TimeZone.getTimeZone("EST"));
 
-                result.appendField(match.name, match.parent.getDay() + ", " + date.format(match.begin) + "\n" + time.format(match.begin) + " - " + time.format(match.end) + " EST", false);
+                if(fields != 0 && fields % 25 == 0) {
+                    loading.delete();
+                    MessageUtil.sendMessage(event, result);
+                    result.clearFields();
+                } else
+                    result.appendField(match.name, match.parent.getDay() + ", " + date.format(match.begin) + "\n" + time.format(match.begin) + " - " + time.format(match.end) + " EST", false);
+                fields++;
             }
-            MessageUtil.editMessage(loading, result);
+            if(fields < 25)
+                MessageUtil.editMessage(loading, result);
+            else
+                MessageUtil.sendMessage(event, result);
         } catch (Exception e) {
             MessageUtil.editMessage(loading, EmbedPresets.error(e + ""));
             e.printStackTrace();
