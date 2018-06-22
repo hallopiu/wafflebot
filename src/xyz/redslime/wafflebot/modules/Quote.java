@@ -1,12 +1,12 @@
 package xyz.redslime.wafflebot.modules;
 
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
+import sx.blah.discord.handle.obj.IMessage;
 import xyz.redslime.wafflebot.module.ReactModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
 import xyz.redslime.wafflebot.util.DiscordHelper;
 import xyz.redslime.wafflebot.util.MessageUtil;
 import xyz.redslime.wafflebot.util.WaffleEmbedBuilder;
-import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
-import sx.blah.discord.handle.obj.IMessage;
 
 /**
  * Created by redslime on 29.03.2018
@@ -19,6 +19,7 @@ public class Quote extends ReactModule {
     public Quote() {
         super("Discord Quote Module", "Allows you to quote a message by reacting with :speech_left: :speech_balloon: :quote: on the message you want to quote", false, true);
         trigger(REACT_NAME, "🗨", "🗨️", "💬", "👁️");
+        removeAfter(true);
     }
 
     @Override
@@ -36,6 +37,4 @@ public class Quote extends ReactModule {
         }
         MessageUtil.sendMessage(reactionEvent, embed);
     }
-
-
 }

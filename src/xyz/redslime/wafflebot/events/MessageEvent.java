@@ -1,5 +1,6 @@
 package xyz.redslime.wafflebot.events;
 
+import sx.blah.discord.util.RequestBuffer;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.module.ChatListenerModule;
@@ -56,8 +57,14 @@ public class MessageEvent extends Event implements IListener<sx.blah.discord.han
                             continue;
                         if(!rm.getReacts().contains(((ReactionEvent) event).getReaction().getEmoji().getName()))
                             continue;
-                        if(bm.isActive(event.getGuild()))
-                            ((ReactModule) bm).onReact((ReactionEvent) event);
+                        if(bm.isActive(event.getGuild())) {
+                            if(rm.isRemoveReact()) {
+                                RequestBuffer.request(() -> event.getMessage().removeReaction(((ReactionEvent) event).getUser(), ((ReactionEvent) event).getReaction()));
+                                if(((ReactionEvent) event).getReaction().getCount() == 0)
+                                    continue;
+                            }
+                            rm.onReact((ReactionEvent) event);
+                        }
                     }
                 }
             }

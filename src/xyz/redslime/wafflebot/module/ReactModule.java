@@ -14,9 +14,14 @@ import java.util.List;
 public abstract class ReactModule extends BotModule {
 
     List<String> reacts = new ArrayList<>();
+    boolean removeReact;
 
     public ReactModule(String name, String description, boolean activatedDefault, boolean serverModule) {
         super(name, description, activatedDefault, serverModule);
+    }
+
+    public void removeAfter(boolean removeAfter) {
+        removeReact = removeAfter;
     }
 
     public abstract void onReact(ReactionEvent reactionEvent) throws Exception;
