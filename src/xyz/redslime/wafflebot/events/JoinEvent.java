@@ -20,7 +20,7 @@ public class JoinEvent implements IListener<GuildCreateEvent> {
     public void handle(GuildCreateEvent event) {
         long id = event.getGuild().getLongID();
 
-        // Bot joined the server while running
+        // Bot joined a new server
         if(!Wafflebot.data.guildModules.containsKey(id)) {
             WaffleEmbedBuilder embed = new WaffleEmbedBuilder().withColor(Color.ORANGE)
                     .withTitle(":wave: Hello, I'm wafflebot!")
