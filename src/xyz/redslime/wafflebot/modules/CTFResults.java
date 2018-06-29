@@ -27,7 +27,7 @@ public class CTFResults extends ChatListenerModule {
     public void mentioned(MessageReceivedEvent event) throws Exception {
         String msg = event.getMessage().getContent();
 
-        if(msg.toLowerCase().contains("won") && msg.toLowerCase().contains("against") && msg.toLowerCase().contains("-") && msg.toLowerCase().contains("brawl")) {
+        if((msg.toLowerCase().contains("won") && msg.toLowerCase().contains("against") || (msg.toLowerCase().contains("tied"))) && msg.toLowerCase().contains("-") && msg.toLowerCase().contains("brawl")) {
             for(IGuild g : Wafflebot.client.getGuilds()) {
                 if(isActive(g) && !g.equals(event.getGuild())) {
                     MessageUtil.sendMessage(Wafflebot.data.getModuleChannel(g, this), EmbedPresets.information().withTitle(getName()).withDesc(msg).withTimestamp(System.currentTimeMillis()));
