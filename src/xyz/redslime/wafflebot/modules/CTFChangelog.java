@@ -18,7 +18,7 @@ import sx.blah.discord.handle.obj.IGuild;
 public class CTFChangelog extends CommandModule {
 
     public CTFChangelog() {
-        super("CTF Changelog Poster Module", "Sends a message whenever CTF is changed in #general or the default chat", false, true);
+        super("CTF Update Module", "Sends a message whenever CTF is changed in #general or the default chat", false, true);
         setChannelFilter(429311133950935040L);
         setUserFilter(115834525329653760L);
         trigger("!update");
