@@ -1,24 +1,25 @@
 package xyz.redslime.wafflebot.util;
 
-import xyz.redslime.wafflebot.Wafflebot;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
-import xyz.redslime.wafflebot.data.HamzaPPM;
+import xyz.redslime.wafflebot.Wafflebot;
+
+import java.util.List;
 
 /**
  * Created by redslime on 29.03.2018
  */
 public class DiscordHelper {
 
-    public static final String ROLE_REGEX = "<@&([0-9]*)>";
-    public static final String ROLE_REGEX_FRONT = "@(.*)";
-    public static final String USER_REGEX = "<@!?([0-9]*)>";
-    public static final String USER_REGEX_FRONT = "@(.*)#([0-9]{4})";
-    public static final String CHANNEL_REGEX = "<#([0-9]*)>";
-    public static final String CHANNEL_REGEX_FRONT = "#(.*)";
+    private static final String ROLE_REGEX = "<@&([0-9]*)>";
+    private static final String ROLE_REGEX_FRONT = "@(.*)";
+    private static final String USER_REGEX = "<@!?([0-9]*)>";
+    private static final String USER_REGEX_FRONT = "@(.*)#([0-9]{4})";
+    private static final String CHANNEL_REGEX = "<#([0-9]*)>";
+    private static final String CHANNEL_REGEX_FRONT = "#(.*)";
 
     public static IChannel getDefaultChannel(IGuild guild) {
         IChannel result = null;
@@ -129,5 +130,13 @@ public class DiscordHelper {
             }
         }
         return null;
+    }
+
+    public static boolean hasRole(IUser user, IGuild guild, long role) {
+        return user.getRolesForGuild(guild).stream().map(IRole::getLongID).anyMatch(l -> l == role);
+    }
+
+    public static boolean hasRole(long user, IGuild guild, List<Long> roles) {
+        return Wafflebot.client.getUserByID(user).getRolesForGuild(guild).stream().map(IRole::getLongID).anyMatch(roles::contains);
     }
 }

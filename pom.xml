@@ -103,6 +103,12 @@
             <artifactId>google-api-services-sheets</artifactId>
             <version>v4-rev516-1.23.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
 
     </dependencies>
     <description>A module-based Discord bot</description>

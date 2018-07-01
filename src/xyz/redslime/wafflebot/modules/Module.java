@@ -42,13 +42,18 @@ public class Module extends CommandModule {
                         if(perm(event, Permissions.MANAGE_SERVER)) {
                             if(all) {
                                 for(BotModule m : BotModule.modules)
-                                    if(m.isServerModule() && m.isShowInModulesList())
+                                    if(m.isServerModule() && m.isShowInModulesList()) {
                                         m.enable(guild);
+                                        if(m.getInitialRun() != null)
+                                            m.getInitialRun().accept(event);
+                                    }
                                 MessageUtil.sendMessage(event.getChannel(), EmbedPresets.success("All available modules enabled!").withUserFooter(event));
                             } else {
-                                if(module.enable(guild))
+                                if(module.enable(guild)) {
                                     MessageUtil.sendMessage(event.getChannel(), EmbedPresets.success(module.getName() + " enabled!").withUserFooter(event));
-                                else
+                                    if(module.getInitialRun() != null)
+                                        module.getInitialRun().accept(event);
+                                } else
                                     MessageUtil.sendMessage(event, EmbedPresets.error("You can't enable this module here!"));
                             }
                         }

@@ -1,7 +1,9 @@
 package xyz.redslime.wafflebot.events;
 
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
 import sx.blah.discord.util.RequestBuffer;
 import xyz.redslime.wafflebot.Wafflebot;
+import xyz.redslime.wafflebot.data.WaffleEvent;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.module.ChatListenerModule;
 import xyz.redslime.wafflebot.module.CommandModule;
@@ -12,6 +14,9 @@ import sx.blah.discord.api.events.Event;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
+import xyz.redslime.wafflebot.util.SetupFlow;
+
+import java.util.List;
 
 /**
  * Created by redslime on 28.03.2018
@@ -21,6 +26,19 @@ public class MessageEvent extends Event implements IListener<sx.blah.discord.han
     @Override
     public void handle(sx.blah.discord.handle.impl.events.guild.channel.message.MessageEvent event) {
         try {
+            if(event instanceof MessageReceivedEvent)
+                SetupFlow.check((MessageReceivedEvent) event);
+            if(event instanceof ReactionEvent)
+                WaffleEvent.checkReaction(event.getMessage(), ((ReactionEvent) event).getReaction(), ((ReactionEvent) event).getUser());
+            if(event instanceof MessageDeleteEvent) {
+                List<WaffleEvent> events = Wafflebot.data.events;
+                for(int i = 0; i < events.size(); i++) {
+                    WaffleEvent e = events.get(i);
+                    if(e.getAnnouncementMessage() == event.getMessage()) {
+                        e.delete();
+                    }
+                }
+            }
             for(BotModule bm : BotModule.modules) {
                 if(!event.getChannel().isPrivate())
                     if(Wafflebot.data.isIgnored(event.getGuild(), event.getChannel()) && !(bm instanceof Config))

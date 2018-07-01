@@ -2,12 +2,14 @@ package xyz.redslime.wafflebot.module;
 
 import lombok.Getter;
 import lombok.Setter;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import xyz.redslime.wafflebot.Wafflebot;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by redslime on 28.03.2018
@@ -27,6 +29,7 @@ public abstract class BotModule {
     long guildLimit;
     boolean usesOutputChannel;
     boolean showInModulesList;
+    Consumer<MessageReceivedEvent> initialRun;
 
     public BotModule(String name, String description, boolean activatedDefault, boolean serverModule) {
         this.name = name;

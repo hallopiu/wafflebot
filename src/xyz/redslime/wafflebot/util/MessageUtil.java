@@ -27,6 +27,10 @@ public class MessageUtil {
         return null;
     }
 
+    public static IMessage sendMessage(IChannel channel, String content, EmbedObject embed) {
+        return RequestBuffer.request(() -> channel.sendMessage(content, embed)).get();
+    }
+
     public static IMessage sendMessage(MessageEvent event, Object message) {
         return sendMessage(event.getChannel(), message);
     }
@@ -55,14 +59,14 @@ public class MessageUtil {
         e.printStackTrace();
         IUser redslime = Wafflebot.client.getUserByID(OWNER);
         String footer = null;
-        if(event != null) {
+        if(event != null && event.getMessage() != null) {
             if(!event.getChannel().isPrivate())
                 footer = "#" + event.getMessage().getChannel().getName() + " - " + event.getMessage().getGuild().getName();
             else
                 footer = "@" + event.getAuthor().getName();
         }
         WaffleEmbedBuilder builder = EmbedPresets.error(e.getClass().getName(), ExceptionUtils.getStackTrace(e) + "", footer);
-        if(event != null) {
+        if(event != null && event.getMessage() != null) {
             if(event.getAuthor().getNicknameForGuild(event.getGuild()) != null)
                 builder.withAuthorName(event.getAuthor().getNicknameForGuild(event.getGuild()) + " (" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator() + ")");
             else
@@ -71,5 +75,11 @@ public class MessageUtil {
             builder.withThumbnail(event.getGuild().getIconURL());
         }
         sendPM(redslime, builder.build());
+    }
+
+    public static void deleteMessage(long messageId) {
+        if(messageId != 0) {
+            RequestBuffer.request(() -> Wafflebot.client.getMessageByID(messageId).delete());
+        }
     }
 }

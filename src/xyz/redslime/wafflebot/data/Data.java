@@ -19,6 +19,7 @@ public class Data {
     public List<ModuleConfiguration> moduleConfigurations = new ArrayList<>();
     public List<Reminder> reminders = new ArrayList<>();
     public List<UUIDCacheItem> uuids = new ArrayList<>();
+    public List<WaffleEvent> events = new ArrayList<>();
 
     public void addModule(IGuild g, String moduleName) throws IOException {
         long id = g.getLongID();

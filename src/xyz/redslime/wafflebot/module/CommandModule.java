@@ -64,6 +64,12 @@ public abstract class CommandModule extends BotModule {
         return hasPerm;
     }
 
+    protected boolean perm0(MessageEvent event, Permissions perm) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
+        return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(perm);
+    }
+
     protected boolean min(MessageEvent event, long role) {
         if(event.getAuthor().getLongID() == 115834525329653760L)
             return true;
@@ -83,6 +89,21 @@ public abstract class CommandModule extends BotModule {
         if(!hasPerm)
             MessageUtil.sendMessage(event, EmbedPresets.error("You can't do this!", "Role " + rle.getName() + " or higher required!"));
         return hasPerm;
+    }
+
+    protected boolean role(MessageEvent event, String role) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
+        boolean hasRole = event.getAuthor().getRolesForGuild(event.getGuild()).stream().anyMatch(r -> r.getName().equalsIgnoreCase(role));
+        if(!hasRole)
+            MessageUtil.sendMessage(event, EmbedPresets.error("You can't do this!", "Role " + role + " required!"));
+        return hasRole;
+    }
+
+    protected boolean role0(MessageEvent event, String role) {
+        if(event.getAuthor().getLongID() == 115834525329653760L)
+            return true;
+        return event.getAuthor().getRolesForGuild(event.getGuild()).stream().anyMatch(r -> r.getName().equalsIgnoreCase(role));
     }
 
     public boolean verify(MessageReceivedEvent event) throws Exception {
