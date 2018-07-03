@@ -39,14 +39,16 @@ public class PPMRemoveRoles extends CommandModule {
         IMessage loading = MessageUtil.sendMessage(event, EmbedPresets.loading(":arrows_counterclockwise: Removing roles"));
         IRole red = event.getGuild().getRoleByID(RED_TEAM);
         IRole blue = event.getGuild().getRoleByID(BLUE_TEAM);
+        IRole playing = event.getGuild().getRoleByID(PLAYING);
         RequestBuilder builder = new RequestBuilder(Wafflebot.client);
         builder.shouldBufferRequests(true);
         builder.doAction(() -> {
             event.getGuild().getUsersByRole(red).forEach(user -> user.removeRole(red));
             event.getGuild().getUsersByRole(blue).forEach(user -> user.removeRole(blue));
+            event.getGuild().getUsersByRole(playing).forEach(user -> user.removeRole(playing));
             return true;
         }).andThen(() -> {
-            MessageUtil.editMessage(loading, EmbedPresets.success("Red/Blue Team Roles removed").withUserFooter(event));
+            MessageUtil.editMessage(loading, EmbedPresets.success("Red/Blue Team & Playing Roles removed").withUserFooter(event));
             return true;
         }).onDiscordError(e -> {
             MessageUtil.sendErrorReport(e, event);

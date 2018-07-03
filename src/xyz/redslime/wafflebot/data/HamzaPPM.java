@@ -14,6 +14,7 @@ public class HamzaPPM {
     public static final long BLUE_TEAM = 276534140625616897L;
     public static final long PPM_SERVER = 276518289289773067L;
     public static final long ANNOUNCEMENTS = 309172630814982156L;
+    public static final long PLAYING = 463443216134569989L;
 
     public static boolean isTeamRole(@Nullable IRole role) {
         if(role == null)
