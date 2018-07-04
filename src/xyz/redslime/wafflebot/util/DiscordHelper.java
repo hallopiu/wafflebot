@@ -1,10 +1,8 @@
 package xyz.redslime.wafflebot.util;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.impl.obj.Channel;
+import sx.blah.discord.handle.obj.*;
 import xyz.redslime.wafflebot.Wafflebot;
 
 import java.util.List;
@@ -138,5 +136,13 @@ public class DiscordHelper {
 
     public static boolean hasRole(long user, IGuild guild, List<Long> roles) {
         return Wafflebot.client.getUserByID(user).getRolesForGuild(guild).stream().map(IRole::getLongID).anyMatch(roles::contains);
+    }
+
+    public static void addToCache(IMessage msg) {
+        if(msg.getChannel() instanceof Channel) {
+            Channel c = (Channel) msg.getChannel();
+            if(!c.messages.containsKey(msg))
+                c.addToCache(msg);
+        }
     }
 }

@@ -84,13 +84,17 @@ public class WaffleEvent {
     public IMessage getAnnouncementMessage() {
         if(Wafflebot.client.getMessageByID(announcementMessage) != null)
             return Wafflebot.client.getMessageByID(announcementMessage);
-        return RequestBuffer.request(() -> Wafflebot.client.getChannelByID(announceChannel).fetchMessage(announcementMessage)).get();
+        IMessage msg = RequestBuffer.request(() -> Wafflebot.client.getChannelByID(announceChannel).fetchMessage(announcementMessage)).get();
+        DiscordHelper.addToCache(msg);
+        return msg;
     }
 
     private IMessage getListMessage() {
         if(Wafflebot.client.getMessageByID(listMessage) != null)
             return Wafflebot.client.getMessageByID(listMessage);
-        return RequestBuffer.request(() -> Wafflebot.client.getChannelByID(listChannel).fetchMessage(listMessage)).get();
+        IMessage msg = RequestBuffer.request(() -> Wafflebot.client.getChannelByID(listChannel).fetchMessage(listMessage)).get();
+        DiscordHelper.addToCache(msg);
+        return msg;
     }
 
     private void updateParticipantsList(IUser changed, boolean playing) {
@@ -111,7 +115,6 @@ public class WaffleEvent {
                 else
                     this.notPlaying.stream().filter(e -> e.user == changed.getLongID()).findFirst().ifPresent(this.notPlaying::remove);
             }
-
             MessageUtil.editMessage(getListMessage(), buildList());
             try {
                 Wafflebot.save();
