@@ -94,29 +94,31 @@ public class WaffleEvent {
     }
 
     private void updateParticipantsList(IUser changed, boolean playing) {
-        if(playing) {
-            if(getAnnouncementMessage().getReactionByEmoji(getPlayingEmoji()).getUsers().contains(changed)) {
-                this.playing.add(new UserEntry(changed));
-                if(getGiveRole() != null)
-                    RequestBuffer.request(() -> changed.addRole(getGiveRole()));
+        new Thread(() -> {
+            if(playing) {
+                if(getAnnouncementMessage().getReactionByEmoji(getPlayingEmoji()).getUsers().contains(changed)) {
+                    this.playing.add(new UserEntry(changed));
+                    if(getGiveRole() != null)
+                        RequestBuffer.request(() -> changed.addRole(getGiveRole()));
+                } else {
+                    this.playing.stream().filter(e -> e.user == changed.getLongID()).findFirst().ifPresent(this.playing::remove);
+                    if(getGiveRole() != null)
+                        RequestBuffer.request(() -> changed.removeRole(getGiveRole()));
+                }
             } else {
-                this.playing.stream().filter(e -> e.user == changed.getLongID()).findFirst().ifPresent(this.playing::remove);
-                if(getGiveRole() != null)
-                    RequestBuffer.request(() -> changed.removeRole(getGiveRole()));
+                if(getAnnouncementMessage().getReactionByEmoji(getNotPlayingEmoji()).getUsers().contains(changed))
+                    this.notPlaying.add(new UserEntry(changed));
+                else
+                    this.notPlaying.stream().filter(e -> e.user == changed.getLongID()).findFirst().ifPresent(this.notPlaying::remove);
             }
-        } else {
-            if(getAnnouncementMessage().getReactionByEmoji(getNotPlayingEmoji()).getUsers().contains(changed))
-                this.notPlaying.add(new UserEntry(changed));
-            else
-                this.notPlaying.stream().filter(e -> e.user == changed.getLongID()).findFirst().ifPresent(this.notPlaying::remove);
-        }
 
-        MessageUtil.editMessage(getListMessage(), buildList());
-        try {
-            Wafflebot.save();
-        } catch (IOException e) {
-            MessageUtil.sendErrorReport(e, null);
-        }
+            MessageUtil.editMessage(getListMessage(), buildList());
+            try {
+                Wafflebot.save();
+            } catch (IOException e) {
+                MessageUtil.sendErrorReport(e, null);
+            }
+        }).start();
     }
 
     private String mentionRoles() {
