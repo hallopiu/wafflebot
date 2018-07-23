@@ -151,7 +151,7 @@ public class DiscordHelper {
     public static IRole getOrCreateRole(String roleName, IGuild guild) {
         return guild.getRoles().stream().filter(r -> r.getName().equals(roleName)).findFirst().orElseGet(() -> {
             IRole newRole = guild.createRole();
-            newRole.edit(Color.LIGHT_GRAY, false, roleName, EnumSet.noneOf(Permissions.class), false);
+            newRole.edit(Color.WHITE, false, roleName, EnumSet.noneOf(Permissions.class), false);
             return newRole;
         });
     }
