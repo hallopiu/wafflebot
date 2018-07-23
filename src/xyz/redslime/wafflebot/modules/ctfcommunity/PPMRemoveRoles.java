@@ -1,4 +1,4 @@
-package xyz.redslime.wafflebot.modules.ppm;
+package xyz.redslime.wafflebot.modules.ctfcommunity;
 
 import sx.blah.discord.util.RequestBuilder;
 import xyz.redslime.wafflebot.Wafflebot;
@@ -9,10 +9,8 @@ import xyz.redslime.wafflebot.util.MessageUtil;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
-import sx.blah.discord.handle.obj.IUser;
-import xyz.redslime.wafflebot.util.Utils;
 
-import static xyz.redslime.wafflebot.data.HamzaPPM.*;
+import static xyz.redslime.wafflebot.data.CTFCommunityDiscord.*;
 
 /**
  * Created by redslime on 29.03.2018
@@ -23,9 +21,9 @@ public class PPMRemoveRoles extends CommandModule {
     public PPMRemoveRoles() {
         super("PPM Role Remover Module", "Removes Red/Blue team roles. Made for Hamza's PPM server", true, true);
         trigger("!removeroles");
-        limit(PPM_SERVER);
+        limit(SERVER);
         setGuildOnly(true);
-        setGuildFilter(PPM_SERVER);
+        setGuildFilter(SERVER);
         setShowInModulesList(false);
     }
 

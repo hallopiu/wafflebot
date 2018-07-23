@@ -30,15 +30,15 @@ public class MessageEvent extends Event implements IListener<sx.blah.discord.han
                 SetupFlow.check((MessageReceivedEvent) event);
             if(event instanceof ReactionEvent)
                 WaffleEvent.checkReaction(event.getMessage(), ((ReactionEvent) event).getReaction(), ((ReactionEvent) event).getUser());
-            if(event instanceof MessageDeleteEvent) {
-                List<WaffleEvent> events = Wafflebot.data.events;
-                for(int i = 0; i < events.size(); i++) {
-                    WaffleEvent e = events.get(i);
-                    if(e.getAnnouncementMessage() == event.getMessage()) {
-                        e.delete();
-                    }
-                }
-            }
+//            if(event instanceof MessageDeleteEvent) {
+//                List<WaffleEvent> events = Wafflebot.data.events;
+//                for(int i = 0; i < events.size(); i++) {
+//                    WaffleEvent e = events.get(i);
+//                    if(e.getAnnouncementMessage() == event.getMessage()) {
+//                        e.delete();
+//                    }
+//                }
+//            }
             for(BotModule bm : BotModule.modules) {
                 if(!event.getChannel().isPrivate())
                     if(Wafflebot.data.isIgnored(event.getGuild(), event.getChannel()) && !(bm instanceof Config))

@@ -1,4 +1,4 @@
-package xyz.redslime.wafflebot.modules.ppm;
+package xyz.redslime.wafflebot.modules.ctfcommunity;
 
 import org.ocpsoft.prettytime.PrettyTime;
 import sx.blah.discord.handle.obj.IChannel;
@@ -11,10 +11,9 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.MessageHistory;
-import xyz.redslime.wafflebot.data.HamzaPPM;
+import xyz.redslime.wafflebot.data.CTFCommunityDiscord;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,15 +29,15 @@ public class PPMActivity extends CommandModule {
         super("PPM Host Activity Checker Module", "Checks activity of all PPM Hosts", true, true);
         trigger("!checkactivity");
         aliases("!adminactivity");
-        limit(HamzaPPM.PPM_SERVER);
+        limit(CTFCommunityDiscord.SERVER);
         setGuildOnly(true);
-        setGuildFilter(HamzaPPM.PPM_SERVER);
+        setGuildFilter(CTFCommunityDiscord.SERVER);
         setShowInModulesList(false);
     }
 
     @Override
     public boolean verify(MessageReceivedEvent event) throws Exception {
-        return min(event, HamzaPPM.ADMIN) && super.verify(event);
+        return min(event, CTFCommunityDiscord.SERVER_ADMIN) && super.verify(event);
     }
 
     @Override
@@ -48,9 +47,9 @@ public class PPMActivity extends CommandModule {
         new Thread(() -> {
             String result = "";
             if(event.getMessage().getContent().toLowerCase().startsWith("!checkactivity")) {
-                result = "Last PPM = date of last message sent in announcements containing \"ppm\"\n\n";
-                MessageHistory mh = event.getGuild().getChannelByID(HamzaPPM.ANNOUNCEMENTS).getFullMessageHistory();
-                for(IUser user : event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(HamzaPPM.PPM_HOST))) {
+                result = "Last PPM = date of last message sent in announcements containing \"ctfcommunity\"\n\n";
+                MessageHistory mh = event.getGuild().getChannelByID(CTFCommunityDiscord.ANNOUNCEMENTS).getFullMessageHistory();
+                for(IUser user : event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(CTFCommunityDiscord.PPM_HOST))) {
                     for(IMessage message : mh.asArray()) {
                         if(message.getAuthor().getLongID() == user.getLongID() && message.getContent().toLowerCase().contains("ppm")) {
                             long timestamp = message.getTimestamp().toEpochMilli();
@@ -68,7 +67,7 @@ public class PPMActivity extends CommandModule {
                 }
             } else {
                 result = "Last message in any chat\n\n";
-                List<IUser> admins = event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(HamzaPPM.ADMIN));
+                List<IUser> admins = event.getGuild().getUsersByRole(Wafflebot.client.getRoleByID(CTFCommunityDiscord.SERVER_ADMIN));
                 for(IChannel c : event.getGuild().getChannels()) {
                     MessageHistory mh = c.getMessageHistoryTo(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(60));
                     for(IMessage m : mh.asArray()) {

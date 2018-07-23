@@ -1,9 +1,9 @@
-package xyz.redslime.wafflebot.modules.ppm;
+package xyz.redslime.wafflebot.modules.ctfcommunity;
 
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.RequestBuilder;
 import xyz.redslime.wafflebot.Wafflebot;
-import xyz.redslime.wafflebot.data.HamzaPPM;
+import xyz.redslime.wafflebot.data.CTFCommunityDiscord;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
 import xyz.redslime.wafflebot.util.*;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static xyz.redslime.wafflebot.data.HamzaPPM.PPM_HOST;
-import static xyz.redslime.wafflebot.data.HamzaPPM.PPM_SERVER;
+import static xyz.redslime.wafflebot.data.CTFCommunityDiscord.PPM_HOST;
+import static xyz.redslime.wafflebot.data.CTFCommunityDiscord.SERVER;
 
 /**
  * Created by redslime on 30.03.2018
@@ -29,8 +29,8 @@ public class PPMSetRoles extends CommandModule {
     public PPMSetRoles() {
         super("PPM Role Setter Module", "Sets Red/Blue team roles. Made for Hamza's PPM server", true, true);
         trigger("!setroles");
-        limit(PPM_SERVER);
-        setGuildFilter(PPM_SERVER);
+        limit(SERVER);
+        setGuildFilter(SERVER);
         setGuildOnly(true);
         setShowInModulesList(false);
     }
@@ -64,7 +64,7 @@ public class PPMSetRoles extends CommandModule {
 
                 if(DiscordHelper.isUser(guild, line)) {
                     IUser u = DiscordHelper.getUser(guild, line);
-                    if(HamzaPPM.isTeamRole(currentTeam.get()) && !u.hasRole(currentTeam.get())) {
+                    if(CTFCommunityDiscord.isTeamRole(currentTeam.get()) && !u.hasRole(currentTeam.get())) {
                         u.addRole(currentTeam.get());
                         rolesSet.getAndIncrement();
                         continue;

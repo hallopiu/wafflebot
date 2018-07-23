@@ -1,7 +1,5 @@
 package xyz.redslime.wafflebot.util;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +26,10 @@ public class Utils {
         StringBuilder result = new StringBuilder();
         for(int i = 0; i < args.length; i++) {
             if(i >= start) {
-                result.append(" ").append(args[i]);
+                result.append(args[i]).append(" ");
             }
         }
+        result.delete(result.length() - 1, result.length());
         return result.toString();
     }
 

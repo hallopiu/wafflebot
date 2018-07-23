@@ -5,6 +5,8 @@ import sx.blah.discord.handle.impl.obj.Channel;
 import sx.blah.discord.handle.obj.*;
 import xyz.redslime.wafflebot.Wafflebot;
 
+import java.awt.*;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -144,5 +146,13 @@ public class DiscordHelper {
             if(!c.messages.containsKey(msg))
                 c.addToCache(msg);
         }
+    }
+
+    public static IRole getOrCreateRole(String roleName, IGuild guild) {
+        return guild.getRoles().stream().filter(r -> r.getName().equals(roleName)).findFirst().orElseGet(() -> {
+            IRole newRole = guild.createRole();
+            newRole.edit(Color.LIGHT_GRAY, false, roleName, EnumSet.noneOf(Permissions.class), false);
+            return newRole;
+        });
     }
 }

@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
-import xyz.redslime.wafflebot.data.HamzaPPM;
+import xyz.redslime.wafflebot.data.CTFCommunityDiscord;
 import xyz.redslime.wafflebot.data.WaffleEvent;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
@@ -39,7 +39,7 @@ public class Event extends CommandModule {
             MessageUtil.sendMessage(event, EmbedPresets.error("You're already creating a new event! Do ``!cancel`` to abort the current event creation"));
             return false;
         }
-        if(HamzaPPM.PPM_SERVER == event.getGuild().getLongID() && DiscordHelper.hasRole(event.getAuthor(), event.getGuild(), HamzaPPM.PPM_HOST)) {
+        if(CTFCommunityDiscord.SERVER == event.getGuild().getLongID() && DiscordHelper.hasRole(event.getAuthor(), event.getGuild(), CTFCommunityDiscord.PPM_HOST)) {
             return super.verify(event);
         }
         if(!role0(event, "event manager") && !perm0(event, Permissions.ADMINISTRATOR)) {

@@ -1,4 +1,4 @@
-package xyz.redslime.wafflebot.modules.ppm;
+package xyz.redslime.wafflebot.modules.ctfcommunity;
 
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static xyz.redslime.wafflebot.data.HamzaPPM.PPM_SERVER;
+import static xyz.redslime.wafflebot.data.CTFCommunityDiscord.SERVER;
 
 /**
  * Created by redslime on 03.04.2018
@@ -28,9 +28,9 @@ public class PPMPickMaps extends CommandModule {
     public PPMPickMaps() {
         super("PPM Map Picker Module", "Picks 3 random maps. Made for Hamza's PPM server", true, true);
         trigger("!pickmaps");
-        limit(PPM_SERVER);
+        limit(SERVER);
         setGuildOnly(true);
-        setGuildFilter(PPM_SERVER);
+        setGuildFilter(SERVER);
         setShowInModulesList(false);
     }
 
