@@ -37,7 +37,7 @@ public class PPMActivity extends CommandModule {
 
     @Override
     public boolean verify(MessageReceivedEvent event) throws Exception {
-        return min(event, CTFCommunityDiscord.SERVER_ADMIN) && super.verify(event);
+        return role(event, CTFCommunityDiscord.SERVER_ADMIN) && super.verify(event);
     }
 
     @Override

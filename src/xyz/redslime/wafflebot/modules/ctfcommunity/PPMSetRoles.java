@@ -37,7 +37,7 @@ public class PPMSetRoles extends CommandModule {
 
     @Override
     public boolean verify(MessageReceivedEvent event) throws Exception {
-        return min(event, PPM_HOST) && super.verify(event);
+        return role(event, PPM_HOST) && super.verify(event);
     }
 
     @Override
