@@ -1,13 +1,16 @@
 package xyz.redslime.wafflebot.data;
 
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.IGuild;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.util.DiscordHelper;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by redslime on 29.03.2018
@@ -20,6 +23,7 @@ public class Data {
     public List<Reminder> reminders = new ArrayList<>();
     public List<UUIDCacheItem> uuids = new ArrayList<>();
     public List<WaffleEvent> events = new ArrayList<>();
+    public List<PPMStrike> strikes = new ArrayList<>();
 
     public void addModule(IGuild g, String moduleName) throws IOException {
         long id = g.getLongID();

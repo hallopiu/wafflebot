@@ -1,6 +1,9 @@
 package xyz.redslime.wafflebot.events;
 
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
+import sx.blah.discord.api.events.Event;
+import sx.blah.discord.api.events.IListener;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
 import sx.blah.discord.util.RequestBuffer;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.data.WaffleEvent;
@@ -10,13 +13,7 @@ import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.ReactModule;
 import xyz.redslime.wafflebot.modules.Config;
 import xyz.redslime.wafflebot.util.MessageUtil;
-import sx.blah.discord.api.events.Event;
-import sx.blah.discord.api.events.IListener;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
 import xyz.redslime.wafflebot.util.SetupFlow;
-
-import java.util.List;
 
 /**
  * Created by redslime on 28.03.2018
