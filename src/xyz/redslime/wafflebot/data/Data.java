@@ -21,6 +21,7 @@ public class Data {
     public List<BaseConfiguration> baseConfigurations = new ArrayList<>();
     public List<ModuleConfiguration> moduleConfigurations = new ArrayList<>();
     public List<Reminder> reminders = new ArrayList<>();
+    public List<StrikeReminder> strikeReminders = new ArrayList<>();
     public List<UUIDCacheItem> uuids = new ArrayList<>();
     public List<WaffleEvent> events = new ArrayList<>();
     public List<PPMStrike> strikes = new ArrayList<>();

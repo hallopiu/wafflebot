@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.vdurmont.emoji.EmojiManager;
 import org.reflections.Reflections;
 import xyz.redslime.wafflebot.data.Data;
+import xyz.redslime.wafflebot.data.PPMStrike;
 import xyz.redslime.wafflebot.data.Reminder;
+import xyz.redslime.wafflebot.data.StrikeReminder;
 import xyz.redslime.wafflebot.events.JoinEvent;
 import xyz.redslime.wafflebot.events.MessageEvent;
 import xyz.redslime.wafflebot.events.ReadyEvent;
@@ -52,6 +54,7 @@ public class Wafflebot {
             data = new Data();
 
         Reminder.initialize();
+        StrikeReminder.initialize();
     }
 
     public static void save() throws IOException {

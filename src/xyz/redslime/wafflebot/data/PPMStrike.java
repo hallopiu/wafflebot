@@ -20,4 +20,12 @@ public class PPMStrike {
     public boolean isExpired() {
         return System.currentTimeMillis() - timestamp > tier.getDuration();
     }
+
+    public boolean isActive() {
+        return !isExpired();
+    }
+
+    public long getExpirationTimestamp() {
+        return timestamp + tier.getDuration();
+    }
 }

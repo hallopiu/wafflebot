@@ -16,6 +16,7 @@ public class CTFCommunityDiscord {
     public static final long ANNOUNCEMENTS = 309172630814982156L;
     public static final long PLAYING = 463443216134569989L;
     public static final long STRIKE_ANNOUNCEMENT = 276518289289773067L;
+    public static final long PPM_HOSTS_CHAT = 313870688727597058L;
 
     public static boolean isTeamRole(@Nullable IRole role) {
         if(role == null)

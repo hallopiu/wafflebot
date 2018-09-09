@@ -7,6 +7,7 @@ import sx.blah.discord.handle.obj.IUser;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.data.CTFCommunityDiscord;
 import xyz.redslime.wafflebot.data.PPMStrike;
+import xyz.redslime.wafflebot.data.StrikeReminder;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
 import xyz.redslime.wafflebot.util.*;
@@ -59,6 +60,7 @@ public class Strike extends CommandModule {
                         .timestamp(System.currentTimeMillis())
                         .tier(tier)
                         .build();
+                new StrikeReminder(strike);
                 Wafflebot.data.strikes.add(strike);
                 Wafflebot.save();
 
@@ -112,7 +114,7 @@ public class Strike extends CommandModule {
         }
     }
 
-    public List<PPMStrike> getStrikes(Predicate<PPMStrike> predicate) {
+    public static List<PPMStrike> getStrikes(Predicate<PPMStrike> predicate) {
         return Wafflebot.data.strikes.stream().filter(predicate).collect(Collectors.toList());
     }
 

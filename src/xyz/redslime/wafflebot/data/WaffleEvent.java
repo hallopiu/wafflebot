@@ -6,6 +6,7 @@ import sx.blah.discord.handle.impl.obj.ReactionEmoji;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.RequestBuffer;
 import xyz.redslime.wafflebot.Wafflebot;
+import xyz.redslime.wafflebot.modules.ctfcommunity.Strike;
 import xyz.redslime.wafflebot.util.DiscordHelper;
 import xyz.redslime.wafflebot.util.MessageUtil;
 import xyz.redslime.wafflebot.util.WaffleEmbedBuilder;
@@ -38,6 +39,10 @@ public class WaffleEvent {
     private long listMessage;
 
     public static void checkReaction(IMessage m, IReaction reaction, IUser reactionUser) {
+        if(m.getGuild().getLongID() == CTFCommunityDiscord.SERVER
+                && !Strike.getStrikes(s -> !s.isExpired() && s.getStriked() == reactionUser.getLongID()).isEmpty())
+            return;
+
         String emoji = reaction.getEmoji().getName();
         Wafflebot.data.events.stream().filter(e -> (e.signUpEmoji != null && e.signUpEmoji.equals(emoji)) || (e.rejectEmoji != null && e.rejectEmoji.equals(emoji)))
                 .filter(e -> e.announcementMessage == m.getLongID() && reactionUser != Wafflebot.client.getOurUser())
