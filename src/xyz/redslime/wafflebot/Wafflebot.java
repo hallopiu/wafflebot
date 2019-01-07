@@ -2,10 +2,10 @@ package xyz.redslime.wafflebot;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.vdurmont.emoji.EmojiManager;
 import org.reflections.Reflections;
+import sx.blah.discord.api.ClientBuilder;
+import sx.blah.discord.api.IDiscordClient;
 import xyz.redslime.wafflebot.data.Data;
-import xyz.redslime.wafflebot.data.PPMStrike;
 import xyz.redslime.wafflebot.data.Reminder;
 import xyz.redslime.wafflebot.data.StrikeReminder;
 import xyz.redslime.wafflebot.events.JoinEvent;
@@ -14,12 +14,8 @@ import xyz.redslime.wafflebot.events.ReadyEvent;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.module.annotations.Module;
 import xyz.redslime.wafflebot.module.annotations.RequireOutputChannel;
-import sx.blah.discord.api.ClientBuilder;
-import sx.blah.discord.api.IDiscordClient;
 
 import java.io.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by redslime on 28.03.2018

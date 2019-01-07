@@ -1,11 +1,11 @@
 package xyz.redslime.wafflebot.events;
 
+import sx.blah.discord.api.events.IListener;
+import sx.blah.discord.handle.obj.IGuild;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.data.Data;
 import xyz.redslime.wafflebot.module.BotModule;
 import xyz.redslime.wafflebot.util.MessageUtil;
-import sx.blah.discord.api.events.IListener;
-import sx.blah.discord.handle.obj.IGuild;
 
 /**
  * Created by redslime on 28.03.2018

@@ -12,6 +12,7 @@ import xyz.redslime.wafflebot.module.ChatListenerModule;
 import xyz.redslime.wafflebot.module.CommandModule;
 import xyz.redslime.wafflebot.module.ReactModule;
 import xyz.redslime.wafflebot.modules.Config;
+import xyz.redslime.wafflebot.modules.cic.CIC;
 import xyz.redslime.wafflebot.util.MessageUtil;
 import xyz.redslime.wafflebot.util.SetupFlow;
 
@@ -25,8 +26,10 @@ public class MessageEvent extends Event implements IListener<sx.blah.discord.han
         try {
             if(event instanceof MessageReceivedEvent)
                 SetupFlow.check((MessageReceivedEvent) event);
-            if(event instanceof ReactionEvent)
+            if(event instanceof ReactionEvent) {
                 WaffleEvent.checkReaction(event.getMessage(), ((ReactionEvent) event).getReaction(), ((ReactionEvent) event).getUser());
+                CIC.handleReaction(event.getMessage(), ((ReactionEvent) event).getReaction(), ((ReactionEvent) event).getUser());
+            }
 //            if(event instanceof MessageDeleteEvent) {
 //                List<WaffleEvent> events = Wafflebot.data.events;
 //                for(int i = 0; i < events.size(); i++) {

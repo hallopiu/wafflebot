@@ -30,6 +30,7 @@ public abstract class BotModule {
     boolean usesOutputChannel;
     boolean showInModulesList;
     Consumer<MessageReceivedEvent> initialRun;
+    Runnable init;
 
     public BotModule(String name, String description, boolean activatedDefault, boolean serverModule) {
         this.name = name;
@@ -65,6 +66,8 @@ public abstract class BotModule {
         System.out.println("Enabled module " + name + " in guild " + guild.getName() + " (" + guild.getLongID() + ")");
         guilds.add(guild.getLongID());
         Wafflebot.data.addModule(guild, name.toLowerCase());
+        if(init != null)
+            init.run();
         return true;
     }
 

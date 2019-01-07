@@ -33,37 +33,38 @@ public class CTF extends CommandModule {
 
     @Override
     public void onUse(MessageReceivedEvent event) throws Exception {
-        IMessage loading = MessageUtil.sendMessage(event.getChannel(), EmbedPresets.loading(":signal_strength: Checking...").build());
-        new Thread(() -> {
-            try {
-                WaffleEmbedBuilder eb = EmbedPresets.success("CTF Server Status", null);
-                String match = "";
-                SSHelper.Match m = SSHelper.getNow();
-                if(m != null)
-                    match = "(" + m.name + ")";
-                for(int i = 1; i < 5; i++) {
-                    Info info = getCTF(i);
-                    String state = humanCTF(info.getMotds().getClean()).split("/")[0].replace("> ", "");
-                    String map = humanCTF(info.getMotds().getClean()).split("/")[1].substring(2);
-                    String desc = "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n";
-                    if(state.matches(STATE_REGEX))
-                        desc += "State: " + state;
-                    if(map.matches(MAP_REGEX))
-                        desc += "\n" + map;
-                    if(info.getPlayers().getMax() == 0)
-                        desc = "Offline";
-                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, desc, false);
-                }
-                MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
-            } catch (Exception e) {
-                if(e instanceof ArrayIndexOutOfBoundsException)
-                    MessageUtil.editMessage(loading, EmbedPresets.error(null, "Failed to get CTF server data, are they down?", null));
-                else {
-                    MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
-                    MessageUtil.sendErrorReport(e, event);
-                }
-            }
-        }).start();
+        MessageUtil.sendMessage(event, EmbedPresets.error("Disabled for now, sorry!\nUse !brawl to see player counts"));
+//        IMessage loading = MessageUtil.sendMessage(event.getChannel(), EmbedPresets.loading(":signal_strength: Checking...").build());
+//        new Thread(() -> {
+//            try {
+//                WaffleEmbedBuilder eb = EmbedPresets.success("CTF Server Status", null);
+//                String match = "";
+//                SSHelper.Match m = SSHelper.getNow();
+//                if(m != null)
+//                    match = "(" + m.name + ")";
+//                for(int i = 1; i < 5; i++) {
+//                    Info info = getCTF(i);
+//                    String state = humanCTF(info.getMotds().getClean()).split("/")[0].replace("> ", "");
+//                    String map = humanCTF(info.getMotds().getClean()).split("/")[1].substring(2);
+//                    String desc = "Players: " + info.getPlayers().getOnline() + "/" + info.getPlayers().getMax() + "\n";
+//                    if(state.matches(STATE_REGEX))
+//                        desc += "State: " + state;
+//                    if(map.matches(MAP_REGEX))
+//                        desc += "\n" + map;
+//                    if(info.getPlayers().getMax() == 0)
+//                        desc = "Offline";
+//                    eb.appendField(i != 4 ? "CTF " + i : "CTF Match " + match, desc, false);
+//                }
+//                MessageUtil.editMessage(loading, eb.withUserFooter(event.getAuthor(), event.getGuild()).build());
+//            } catch (Exception e) {
+//                if(e instanceof ArrayIndexOutOfBoundsException)
+//                    MessageUtil.editMessage(loading, EmbedPresets.error(null, "Failed to get CTF server data, are they down?", null));
+//                else {
+//                    MessageUtil.editMessage(loading, EmbedPresets.error(null, e.getClass().getName(), null));
+//                    MessageUtil.sendErrorReport(e, event);
+//                }
+//            }
+//        }).start();
     }
 
     private Info getCTF(int id) throws Exception {

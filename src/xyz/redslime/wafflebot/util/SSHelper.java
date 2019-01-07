@@ -18,7 +18,7 @@ public class SSHelper {
 
     public static final Sheets SERVICE = GoogleSheets.getSheetsService();
     public static final String SHEET_ID = "1CrQOxzaXC6iSjwZwQvu6DNIYsCDg-uQ4x5UiaWLHzxg";
-    public static final String RANGE = "Upcoming Matches!B10:T60";
+    public static final String RANGE = "Upcoming Matches!C10:T60";
     public static final int ROW_DATE = 0;
     public static final int ROW_DAY = 1;
     public static final int COLUMN_TIME = 0;

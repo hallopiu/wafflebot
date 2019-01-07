@@ -80,22 +80,22 @@ public class Strike extends CommandModule {
 
         if(args.length == 1) {
             if(args[0].equalsIgnoreCase("!strikes")) {
-                MessageUtil.sendMessage(event, buildStrikesList(s -> true, event));
+                buildStrikesList(s -> true, event).forEach(e -> MessageUtil.sendMessage(event, e));
             } else
                 MessageUtil.sendMessage(event, EmbedPresets.error("Expected: !strike list\n!strike @user [reason]\n!strike info @user\n!strike remove @user"));
         } else if(args.length == 2) {
             if(args[1].equalsIgnoreCase("list")) {
-                MessageUtil.sendMessage(event, buildStrikesList(s -> true, event));
+                buildStrikesList(s -> true, event).forEach(e -> MessageUtil.sendMessage(event, e));
             }
             if(args[0].equalsIgnoreCase("!strikes") && DiscordHelper.isUser(event.getGuild(), args[1])) {
                 IUser striked = DiscordHelper.getUser(event.getGuild(), args[1]);
-                MessageUtil.sendMessage(event, buildStrikesList(s -> s.getStriked() == striked.getLongID(), event));
+                buildStrikesList(s -> s.getStriked() == striked.getLongID(), event).forEach(e -> MessageUtil.sendMessage(event, e));
             }
         } else if(args.length == 3) {
             if(DiscordHelper.isUser(event.getGuild(), args[2])) {
                 IUser striked = DiscordHelper.getUser(event.getGuild(), args[2]);
                 if(args[1].equalsIgnoreCase("info")) {
-                    MessageUtil.sendMessage(event, buildStrikesList(s -> s.getStriked() == striked.getLongID(), event));
+                    buildStrikesList(s -> s.getStriked() == striked.getLongID(), event).forEach(e -> MessageUtil.sendMessage(event, e));
                 } else if(args[1].equalsIgnoreCase("remove")) {
                     List<PPMStrike> remove = new ArrayList<>(getStrikes(s -> s.getStriked() == striked.getLongID() && !s.isExpired()));
                     Wafflebot.data.strikes.removeAll(remove);
@@ -127,31 +127,61 @@ public class Strike extends CommandModule {
             return StrikeTier.FIRST;
     }
 
-    public EmbedObject buildStrikesList(Predicate<PPMStrike> predicate, MessageReceivedEvent event) {
-        StringBuilder activeSb = new StringBuilder();
-        StringBuilder expiredSb = new StringBuilder();
+    public List<EmbedObject> buildStrikesList(Predicate<PPMStrike> predicate, MessageReceivedEvent event) {
+        List<String> activeSb = new ArrayList<>();
+        List<String> expiredSb = new ArrayList<>();
+        List<EmbedObject> embeds = new ArrayList<>();
 
         getStrikes(predicate).stream().sorted(Comparator.comparing(PPMStrike::getTier)).forEach(strike -> {
             IUser striked = Wafflebot.client.getUserByID(strike.getStriked());
             IUser strikedBy = Wafflebot.client.getUserByID(strike.getStrikedBy());
             String ago = new PrettyTime().format(new Date(strike.getTimestamp()));
 
+            if(striked == null || strikedBy == null)
+                return;
+
             if(!strike.isExpired())
-                activeSb.append(strike.getTier().getEmoji() + " " + striked.mention() + ", striked by " + strikedBy.mention() + ", " + ago + "\n");
+                activeSb.add(strike.getTier().getEmoji() + " " + striked.mention() + ", striked by " + strikedBy.mention() + ", " + ago);
             else
-                expiredSb.append(strike.getTier().getEmoji() + " " + striked.mention() + ", striked by " + strikedBy.mention() + ", " + ago + "\n");
+                expiredSb.add(strike.getTier().getEmoji() + " " + striked.mention() + ", striked by " + strikedBy.mention() + ", " + ago);
         });
 
-        String active = activeSb.toString().isEmpty() ? "None." : activeSb.toString();
-        String expired = expiredSb.toString().isEmpty() ? "None." : expiredSb.toString();
+        String active = activeSb.isEmpty() ? "None." : String.join("\n", activeSb);
 
-        return new WaffleEmbedBuilder()
+        embeds.add(new WaffleEmbedBuilder()
                 .withTitle(":zap: Strikes:")
                 .appendField("Active strikes:", active, false)
+                .withColor(Color.YELLOW)
+                .withUserFooter(event)
+                .build());
+
+        String expired = "";
+        int maxSize = 1024;
+        int currentSize = 0;
+
+        for(String line : expiredSb) {
+            if(currentSize + line.length() + 2 < maxSize) {
+                expired += line + "\n";
+                currentSize += line.length() + 2;
+            } else {
+                embeds.add(new WaffleEmbedBuilder()
+                        .withTitle(":zap: Strikes:")
+                        .appendField("Expired strikes:", expired, false)
+                        .withColor(Color.YELLOW)
+                        .withUserFooter(event)
+                        .build());
+                expired = "";
+                currentSize = 0;
+            }
+        }
+        embeds.add(new WaffleEmbedBuilder()
+                .withTitle(":zap: Strikes:")
                 .appendField("Expired strikes:", expired, false)
                 .withColor(Color.YELLOW)
                 .withUserFooter(event)
-                .build();
+                .build());
+
+        return embeds;
     }
 
     public static enum StrikeTier {

@@ -4,6 +4,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import xyz.redslime.wafflebot.Wafflebot;
 import xyz.redslime.wafflebot.module.BotModule;
+import xyz.redslime.wafflebot.modules.cic.CIC;
 import xyz.redslime.wafflebot.util.DiscordHelper;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class Data {
     public List<UUIDCacheItem> uuids = new ArrayList<>();
     public List<WaffleEvent> events = new ArrayList<>();
     public List<PPMStrike> strikes = new ArrayList<>();
+    public List<CIC.TimeEntry> timeEntries = new ArrayList<>();
 
     public void addModule(IGuild g, String moduleName) throws IOException {
         long id = g.getLongID();
